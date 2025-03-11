@@ -1,1 +1,114 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .board {
+            display: grid;
+            grid-template-rows: repeat(6, 100px);
+            grid-template-columns: repeat(6, 100px);
+            gap: 5px;
+        }
+        .cell {
+            background-color: #fff;
+            border: 2px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="board" id="board"></div>
+
+    <script>
+        const board = document.getElementById('board');
+        const cells = [];
+        let currentPlayer = 'X';
+
+        for (let i = 0; i < 6; i++) {
+            cells[i] = [];
+            for (let j = 0; j < 6; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                cell.addEventListener('click', handleClick);
+                board.appendChild(cell);
+                cells[i][j] = cell;
+            }
+        }
+
+        function handleClick(event) {
+            const cell = event.target;
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+
+            if (cell.textContent === '') {
+                cell.textContent = currentPlayer;
+                if (checkLose(row, col)) {
+                    setTimeout(() => {
+                        alert(`Player ${currentPlayer} loses!`);
+                        resetBoard();
+                    }, 100);
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkLose(row, col) {
+            return (
+                checkDirection(row, col, 1, 0) || // Horizontal
+                checkDirection(row, col, 0, 1) || // Vertical
+                checkDirection(row, col, 1, 1) || // Diagonal
+                checkDirection(row, col, 1, -1)   // Anti-diagonal
+            );
+        }
+
+        function checkDirection(row, col, rowDir, colDir) {
+            let count = 1;
+
+            for (let i = 1; i < 3; i++) {
+                const r = row + i * rowDir;
+                const c = col + i * colDir;
+                if (r >= 0 && r < 6 && c >= 0 && c < 6 && cells[r][c].textContent === currentPlayer) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = 1; i < 3; i++) {
+                const r = row - i * rowDir;
+                const c = col - i * colDir;
+                if (r >= 0 && r < 6 && c >= 0 && c < 6 && cells[r][c].textContent === currentPlayer) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            return count >= 3;
+        }
+
+        function resetBoard() {
+            cells.forEach(row => row.forEach(cell => (cell.textContent = '')));
+            currentPlayer = 'X';
+        }
+    </script>
+</body>
+</html>
