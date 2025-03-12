@@ -1,26 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
+    <title>ToeTacTic</title>
     <style>
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-size: cover;
             font-family: Arial, sans-serif;
+            overflow: hidden;
+            padding: 10px;
+        }
+        .menu, .board, .settings, .instructions {
+            display: none;
+            animation: swipeLeft 0.5s forwards;
+        }
+        .menu, .settings, .instructions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            left: 100vw;
         }
         .board {
             display: grid;
-            grid-template-rows: repeat(6, 100px);
-            grid-template-columns: repeat(6, 100px);
             gap: 5px;
+            animation: swipeUp 0.5s forwards;
         }
-        .cell {
+        .cell, .button, .emoji-input {
             background-color: #fff;
             border: 2px solid #000;
             display: flex;
@@ -28,27 +40,244 @@
             align-items: center;
             font-size: 2em;
             cursor: pointer;
+            padding: 20px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .cell:hover {
+            background-color: #f9f9f9;
+        }
+        .cell.win {
+            background-color: #ffcccc;
+            animation: streakAnimation 1s infinite alternate;
+        }
+        @keyframes swipeLeft {
+            from { left: 100vw; }
+            to { left: 0; }
+        }
+        @keyframes swipeUp {
+            from { top: 100vh; }
+            to { top: 0; }
+        }
+        @keyframes streakAnimation {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        @keyframes confetti {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            animation: confetti 2s infinite;
+        }
+        .bottom-menu {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .turn-indicator {
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="board" id="board"></div>
+    <div class="menu" id="menu">
+        <div class="button" id="playWithBot">Play With Bot</div>
+        <div class="button" id="playWithHuman">Play Local</div>
+        <div class="button" id="howToPlay">How To Play</div>
+        <div class="button" id="settings">Settings</div>
+    </div>
+    <div class="settings" id="settingsMenu">
+        <p>Enter Grid Size:</p>
+        <input type="number" id="gridSize" min="3" max="10" value="3">
+        <p>Select AI Difficulty:</p>
+        <select id="aiDifficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+        <p>Choose Emojis:</p>
+        <div id="emojiInputs">
+            <input type="text" class="emoji-input" placeholder="Player 1 Emoji" value="❌">
+            <input type="text" class="emoji-input" placeholder="Player 2 Emoji" value="⭕">
+        </div>
+        <p>Select Player Count (Local Mode):</p>
+        <input type="number" id="playerCount" min="2" max="4" value="2">
+        <div class="button" id="saveSettings">Save</div>
+        <div class="button" id="backToMenuFromSettings">Back to Menu</div>
+    </div>
+    <div id="boardContainer">
+        <div class="turn-indicator" id="turnIndicator">Turn: ❌</div>
+        <div class="board" id="board"></div>
+    </div>
+    <div class="instructions" id="instructions">
+        <p>How to Play:</p>
+        <p>The goal is to lose the game by aligning three of your marks (X or O) in a row, column, or diagonal.</p>
+        <div class="button" id="backToMenu">Back to Menu</div>
+    </div>
+    <div id="confetti-container"></div>
+    <div class="bottom-menu" id="gameMenuButton" style="display: none;">
+        <div class="button" id="backToMainMenu">Menu</div>
+    </div>
 
     <script>
+        const menu = document.getElementById('menu');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const boardContainer = document.getElementById('boardContainer');
         const board = document.getElementById('board');
-        const cells = [];
-        let currentPlayer = 'X';
+        const instructions = document.getElementById('instructions');
+        const confettiContainer = document.getElementById('confetti-container');
+        const playWithBot = document.getElementById('playWithBot');
+        const playWithHuman = document.getElementById('playWithHuman');
+        const howToPlay = document.getElementById('howToPlay');
+        const settings = document.getElementById('settings');
+        const saveSettings = document.getElementById('saveSettings');
+        const backToMenuFromSettings = document.getElementById('backToMenuFromSettings');
+        const backToMenu = document.getElementById('backToMenu');
+        const backToMainMenu = document.getElementById('backToMainMenu');
+        const gridSizeInput = document.getElementById('gridSize');
+        const aiDifficulty = document.getElementById('aiDifficulty');
+        const playerCountInput = document.getElementById('playerCount');
+        const emojiInputs = document.getElementById('emojiInputs');
+        const turnIndicator = document.getElementById('turnIndicator');
+        const gameMenuButton = document.getElementById('gameMenuButton');
+        let cells = [];
+        let currentPlayerIndex = 0;
+        let playerCount = 2;
+        let gridSize = 3;
+        let players = [];
+        let playWithBotMode = false;
 
-        for (let i = 0; i < 6; i++) {
-            cells[i] = [];
-            for (let j = 0; j < 6; j++) {
-                const cell = document.createElement('div');
-                cell.classList.add('cell');
-                cell.dataset.row = i;
-                cell.dataset.col = j;
-                cell.addEventListener('click', handleClick);
-                board.appendChild(cell);
-                cells[i][j] = cell;
+        const backgrounds = [
+            'url(https://source.unsplash.com/random/800x600)',
+            'url(https://source.unsplash.com/random/801x601)',
+            'url(https://source.unsplash.com/random/802x602)',
+            'url(https://source.unsplash.com/random/803x603)'
+        ];
+
+        document.body.style.backgroundImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            openMenu(menu);
+        });
+
+        function openMenu(menu) {
+            closeAllMenus();
+            menu.style.display = 'flex';
+            menu.style.animation = 'swipeLeft 0.5s forwards';
+        }
+
+        function closeAllMenus() {
+            menu.style.display = 'none';
+            settingsMenu.style.display = 'none';
+            instructions.style.display = 'none';
+            boardContainer.style.display = 'none';
+            gameMenuButton.style.display = 'none';
+        }
+
+        playWithBot.addEventListener('click', () => {
+            playWithBotMode = true;
+            playerCount = 2;  // Reset to 2 players for bot mode
+            startGame();
+        });
+
+        playWithHuman.addEventListener('click', () => {
+            playWithBotMode = false;
+            playerCount = parseInt(playerCountInput.value);
+            startGame();
+        });
+
+        howToPlay.addEventListener('click', () => {
+            openMenu(instructions);
+        });
+
+        settings.addEventListener('click', () => {
+            openMenu(settingsMenu);
+            updateEmojiInputs();
+        });
+
+        saveSettings.addEventListener('click', () => {
+            playerCount = parseInt(playerCountInput.value);
+            if (playerCount === 3 && gridSize < 4) {
+                gridSize = 4;
+                gridSizeInput.value = 4;
+            } else if (playerCount === 4 && gridSize < 6) {
+                gridSize = 6;
+                gridSizeInput.value = 6;
+            } else {
+                gridSize = parseInt(gridSizeInput.value);
+            }
+            openMenu(menu);
+        });
+
+        backToMenuFromSettings.addEventListener('click', () => {
+            openMenu(menu);
+        });
+
+        backToMenu.addEventListener('click', () => {
+            openMenu(menu);
+        });
+
+        backToMainMenu.addEventListener('click', () => {
+            openMenu(menu);
+        });
+
+        playerCountInput.addEventListener('change', updateEmojiInputs);
+
+        function updateEmojiInputs() {
+            const count = parseInt(playerCountInput.value);
+            emojiInputs.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.classList.add('emoji-input');
+                input.placeholder = `Player ${i} Emoji`;
+                input.value = i === 3 ? '⚠️' : (i === 4 ? '💣' : (i % 2 === 0 ? '⭕' : '❌'));
+                emojiInputs.appendChild(input);
+            }
+        }
+
+        function startGame() {
+            closeAllMenus();
+            boardContainer.style.display = 'flex';
+            board.style.display = 'grid';
+            gameMenuButton.style.display = 'block';
+            board.innerHTML = ''; // Clear previous board
+            board.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
+            board.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
+
+            players = [];
+            const emojis = document.querySelectorAll('.emoji-input');
+            for (let i = 0; i < playerCount; i++) {
+                players.push(emojis[i].value);
+            }
+
+            if (playWithBotMode) {
+                players = ['🧬', '🤖'];
+            }
+
+            turnIndicator.textContent = `Turn: ${players[0]}`;
+
+            cells = [];
+            currentPlayerIndex = 0;
+
+            for (let i = 0; i < gridSize; i++) {
+                cells[i] = [];
+                for (let j = 0; j < gridSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.addEventListener('click', handleClick);
+                    board.appendChild(cell);
+                    cells[i][j] = cell;
+                }
             }
         }
 
@@ -58,14 +287,20 @@
             const col = parseInt(cell.dataset.col);
 
             if (cell.textContent === '') {
-                cell.textContent = currentPlayer;
+                cell.textContent = players[currentPlayerIndex];
                 if (checkLose(row, col)) {
                     setTimeout(() => {
-                        alert(`Player ${currentPlayer} loses!`);
-                        resetBoard();
+                        alert(`Player ${players[currentPlayerIndex]} loses! ${players[(currentPlayerIndex + 1) % players.length]} wins!`);
+                        showLosingStreak(row, col);
+                        triggerConfetti();
+                        setTimeout(resetBoard, 2000);
                     }, 100);
                 } else {
-                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                    turnIndicator.textContent = `Turn: ${players[currentPlayerIndex]}`;
+                    if (playWithBotMode && currentPlayerIndex === 1) {
+                        setTimeout(botMove, 500);
+                    }
                 }
             }
         }
@@ -81,12 +316,14 @@
 
         function checkDirection(row, col, rowDir, colDir) {
             let count = 1;
+            let winCells = [{row, col}];
 
             for (let i = 1; i < 3; i++) {
                 const r = row + i * rowDir;
                 const c = col + i * colDir;
-                if (r >= 0 && r < 6 && c >= 0 && c < 6 && cells[r][c].textContent === currentPlayer) {
+                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize && cells[r][c].textContent === players[currentPlayerIndex]) {
                     count++;
+                    winCells.push({row: r, col: c});
                 } else {
                     break;
                 }
@@ -95,19 +332,77 @@
             for (let i = 1; i < 3; i++) {
                 const r = row - i * rowDir;
                 const c = col - i * colDir;
-                if (r >= 0 && r < 6 && c >= 0 && c < 6 && cells[r][c].textContent === currentPlayer) {
+                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize && cells[r][c].textContent === players[currentPlayerIndex]) {
                     count++;
+                    winCells.push({row: r, col: c});
                 } else {
                     break;
                 }
             }
 
-            return count >= 3;
+            if (count >= 3) {
+                winCells.forEach(cell => cells[cell.row][cell.col].classList.add('win'));
+                return true;
+            }
+            return false;
+        }
+
+        function showLosingStreak(row, col) {
+            cells.forEach(row => row.forEach(cell => cell.classList.remove('win')));
+            checkDirection(row, col, 1, 0); // Horizontal
+            checkDirection(row, col, 0, 1); // Vertical
+            checkDirection(row, col, 1, 1); // Diagonal
+            checkDirection(row, col, 1, -1); // Anti-diagonal
         }
 
         function resetBoard() {
-            cells.forEach(row => row.forEach(cell => (cell.textContent = '')));
-            currentPlayer = 'X';
+            cells.forEach(row => row.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('win');
+            }));
+            currentPlayerIndex = 0;
+            turnIndicator.textContent = `Turn: ${players[0]}`;
+        }
+
+        function botMove() {
+            const emptyCells = [];
+            for (const row of cells) {
+                for (const cell of row) {
+                    if (cell.textContent === '') {
+                        emptyCells.push(cell);
+                    }
+                }
+            }
+
+            if (emptyCells.length > 0) {
+                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                randomCell.textContent = players[1];
+                const row = parseInt(randomCell.dataset.row);
+                const col = parseInt(randomCell.dataset.col);
+                if (checkLose(row, col)) {
+                    setTimeout(() => {
+                        alert(`Player ${players[1]} loses! ${players[0]} wins!`);
+                        showLosingStreak(row, col);
+                        triggerConfetti();
+                        setTimeout(resetBoard, 2000);
+                    }, 100);
+                } else {
+                    currentPlayerIndex = 0;
+                    turnIndicator.textContent = `Turn: ${players[currentPlayerIndex]}`;
+                }
+            }
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.top = `${Math.random() * 100}vh`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confettiContainer.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
         }
     </script>
 </body>
