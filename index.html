@@ -18,7 +18,7 @@
         }
         .menu, .board, .settings, .instructions {
             display: none;
-            animation: swipeLeft 0.5s forwards;
+            animation: swipeLeft 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; /* Added bounce effect */
         }
         .menu, .settings, .instructions {
             display: flex;
@@ -30,7 +30,7 @@
         .board {
             display: grid;
             gap: 5px;
-            animation: swipeUp 0.5s forwards;
+            animation: swipeUp 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; /* Added bounce effect */
         }
         .cell, .button, .emoji-input {
             background-color: #fff;
@@ -50,7 +50,10 @@
         }
         .cell.win {
             background-color: #ffcccc;
-            animation: streakAnimation 1s infinite alternate;
+            animation: winAnimation 1s infinite alternate; /* Dramatic pulsing effect */
+        }
+        .cell:active {
+            animation: clickAnimation 0.5s ease; /* Scale and rotate on click */
         }
         @keyframes swipeLeft {
             from { left: 100vw; }
@@ -60,9 +63,14 @@
             from { top: 100vh; }
             to { top: 0; }
         }
-        @keyframes streakAnimation {
+        @keyframes winAnimation {
             0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+            100% { transform: scale(1.2) rotate(10deg); } /* Pulsing larger and rotating */
+        }
+        @keyframes clickAnimation {
+            0% { transform: scale(1) rotate(0); }
+            50% { transform: scale(1.1) rotate(20deg); }
+            100% { transform: scale(1) rotate(0); }
         }
         @keyframes confetti {
             0% { transform: translateY(0); }
@@ -171,7 +179,7 @@
         function openMenu(menu) {
             closeAllMenus();
             menu.style.display = 'flex';
-            menu.style.animation = 'swipeLeft 0.5s forwards';
+            menu.style.animation = 'swipeLeft 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards';
         }
 
         function closeAllMenus() {
