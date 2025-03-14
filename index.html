@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToeTacTic</title>
     <style>
+        /* Existing Styles */
         body {
             display: flex;
             flex-direction: column;
@@ -16,7 +17,7 @@
             overflow-x: hidden;
             overflow-y: auto;
             padding: 10px;
-            color: black; /* Set text to black */
+            color: black;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -76,7 +77,7 @@
             margin: 10px;
             transition: all 0.3s ease;
             border-radius: 10px;
-            color: black; /* Ensure text in boxes is black */
+            color: black;
         }
 
         .cell:hover {
@@ -181,7 +182,7 @@
     </div>
     <div id="boardContainer">
         <div class="turn-indicator" id="turnIndicator">Turn: ❌</div>
-        <div class="board" id="board"></div>
+        <div class="board checkerboard" id="board"></div>
     </div>
     <div class="instructions" id="instructions">
         <p>How to Play:</p>
