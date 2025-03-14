@@ -11,7 +11,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-size: cover;
+            background-color: white; /* Set background to white */
             font-family: Arial, sans-serif;
             overflow: hidden;
             padding: 10px;
@@ -28,6 +28,10 @@
             left: 100vw;
         }
         .board {
+            width: calc(100vw - 40px);
+            height: calc(100vh - 40px);
+            max-width: 600px;
+            max-height: 600px;
             display: grid;
             gap: 5px;
             animation: swipeUp 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; /* Added bounce effect */
@@ -163,15 +167,6 @@
         let players = [];
         let playWithBotMode = false;
 
-        const backgrounds = [
-            'url(https://source.unsplash.com/random/800x600)',
-            'url(https://source.unsplash.com/random/801x601)',
-            'url(https://source.unsplash.com/random/802x602)',
-            'url(https://source.unsplash.com/random/803x603)'
-        ];
-
-        document.body.style.backgroundImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-
         document.addEventListener('DOMContentLoaded', () => {
             openMenu(menu);
         });
@@ -304,6 +299,11 @@
                         triggerConfetti();
                         setTimeout(resetBoard, 2000);
                     }, 100);
+                } else if (isBoardFull()) {
+                    setTimeout(() => {
+                        alert(`It's a draw!`);
+                        resetBoard();
+                    }, 100);
                 } else {
                     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                     turnIndicator.textContent = `Turn: ${players[currentPlayerIndex]}`;
@@ -312,6 +312,17 @@
                     }
                 }
             }
+        }
+
+        function isBoardFull() {
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].textContent === '') {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         function checkLose(row, col) {
