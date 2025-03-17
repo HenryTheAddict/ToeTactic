@@ -166,10 +166,6 @@
             <p>Select Player Count (Local Mode):</p>
             <input type="number" id="playerCount" min="2" max="4" value="2">
         </div>
-        <div class="settings-box">
-            <p>Toggle Checkerboard Background:</p>
-            <input type="checkbox" id="toggleCheckerboard">
-        </div>
         <div class="button" id="saveSettings">Save</div>
         <div class="button" id="backToMenuFromSettings">Back to Menu</div>
     </div>
@@ -208,7 +204,6 @@
         const emojiInputs = document.getElementById('emojiInputs');
         const turnIndicator = document.getElementById('turnIndicator');
         const gameMenuButton = document.getElementById('gameMenuButton');
-        const toggleCheckerboard = document.getElementById('toggleCheckerboard');
         let cells = [];
         let currentPlayerIndex = 0;
         let playerCount = 2;
@@ -265,11 +260,6 @@
                 gridSizeInput.value = 6;
             } else {
                 gridSize = parseInt(gridSizeInput.value);
-            }
-            if (toggleCheckerboard.checked) {
-                board.classList.add('checkerboard');
-            } else {
-                board.classList.remove('checkerboard');
             }
             openMenu(menu);
         });
@@ -475,4 +465,4 @@
         }
     </script>
 </body>
-</html>	
+</html>
