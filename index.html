@@ -5,182 +5,963 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToeTacTic</title>
     <style>
-        /* Existing Styles */
+        /* Windows Vista Theme */
+        :root {
+            --vista-bg: linear-gradient(135deg, #0a246a, #3b5998);
+            --vista-window: rgba(255, 255, 255, 0.85);
+            --vista-border: rgba(255, 255, 255, 0.5);
+            --vista-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            --vista-glow: 0 0 15px rgba(255, 255, 255, 0.3);
+            --vista-blue: #1e90ff;
+            --vista-text: #000000;
+            --vista-highlight: rgba(255, 255, 255, 0.1);
+            --modal-bg: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            --modal-text: #000000;
+            --cell-bg: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            transition: all 0.5s ease;
+        }
+
+        :root.dark-mode {
+            --vista-bg: linear-gradient(135deg, #000428, #004e92);
+            --vista-window: rgba(30, 30, 30, 0.85);
+            --vista-border: rgba(255, 255, 255, 0.2);
+            --vista-text: #ffffff;
+            --vista-highlight: rgba(255, 255, 255, 0.05);
+            --modal-bg: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+            --modal-text: #ffffff;
+            --cell-bg: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+        }
+
+        * {
+            transition: background 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --vista-bg: linear-gradient(135deg, #000428, #004e92);
+                --vista-window: rgba(30, 30, 30, 0.85);
+                --vista-border: rgba(255, 255, 255, 0.2);
+                --vista-text: #ffffff;
+                --vista-highlight: rgba(255, 255, 255, 0.05);
+            }
+
+            .button, .cell, .player-card, .turn-indicator, .settings-box {
+                background: linear-gradient(to bottom, #2a2a2a, #1a1a1a) !important;
+                border-color: rgba(255, 255, 255, 0.1) !important;
+                color: var(--vista-text);
+            }
+
+            .player-card.active {
+                background: linear-gradient(to bottom, #1e3a5f, #0d2339) !important;
+                border-color: var(--vista-blue) !important;
+            }
+
+            .modal {
+                background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+                color: var(--vista-text);
+            }
+
+            .modal-button {
+                background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+                border-color: rgba(255, 255, 255, 0.2);
+                color: var(--vista-text);
+            }
+
+            input, select {
+                background: #2a2a2a;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: var(--vista-text);
+            }
+        }
+
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: white;
-            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            background: var(--vista-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--vista-text);
             overflow-x: hidden;
-            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Water Ripple Effect */
+        .water-ripple {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0);
+            animation: rippleEffect 1.5s ease-out;
+        }
+
+        @keyframes rippleEffect {
+            from {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            width: 100%;
+        }
+
+        .player-order {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
             padding: 10px;
-            color: black;
+            justify-content: center;
+            max-width: 600px;
+            width: 100%;
         }
 
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: black;
-                color: white;
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            body {
-                background-color: white;
-                color: black;
-            }
-        }
-
-        .menu, .board, .settings, .instructions {
-            display: none;
-            animation: swipeLeft 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-        }
-
-        .menu, .settings, .instructions {
+        .player-card {
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: absolute;
-            left: 100vw;
+            gap: 5px;
+            transition: all 0.3s ease;
+            animation: cardShuffle 0.5s ease-out backwards;
+            text-align: center;
+        }
+
+        .player-card.active {
+            background: linear-gradient(to bottom, #e3f0ff, #d1e5ff);
+            border: 1px solid var(--vista-blue);
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
+        }
+
+        .player-emoji {
+            font-size: 1.5em;
+        }
+
+        .window {
+            background: var(--vista-window);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: var(--vista-shadow);
+            border: 1px solid var(--vista-border);
+            padding: 3px;
+            position: relative;
+            width: 100%;
+            margin: auto;
+            transition: all 0.3s ease;
+            animation: windowAppear 0.5s ease-out;
+        }
+
+        @keyframes windowAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .board-scroll-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .board {
-            width: calc(100vw - 40px);
-            height: calc(100vh - 40px);
-            max-width: 600px;
-            max-height: 600px;
             display: grid;
-            gap: 5px;
-            animation: swipeUp 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+            gap: 10px;
+            padding: 20px;
+            margin: auto;
+            max-width: 600px;
+            aspect-ratio: 1;
+            animation: boardAppear 0.5s ease-out;
         }
 
-        .cell, .button, .emoji-input, .settings-box {
-            background-color: #fff;
-            border: 2px solid #000;
+        @keyframes boardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .cell {
+            background: var(--cell-bg);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5em;
+            font-size: 2em;
             cursor: pointer;
-            padding: 10px;
-            margin: 10px;
             transition: all 0.3s ease;
-            border-radius: 10px;
-            color: black;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: cellAppear 0.3s ease-out backwards;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cell:hover {
-            background-color: #f9f9f9;
+        .cell-content {
+            opacity: 0;
+            transform: scale(0.5) translateY(-20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cell.placed .cell-content {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            animation: placePiece 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        .cell::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .cell.placed::after {
+            animation: placementRipple 0.6s ease-out;
+        }
+
+        @keyframes placementRipple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        .title-bar {
+            background: linear-gradient(to bottom, #2671be, #1e4c9c);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px 6px 0 0;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .title-bar-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .title-button {
+            background: linear-gradient(to bottom, #ff5c5c, #e33e3e);
+            color: white;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .title-button:hover {
+            background: linear-gradient(to bottom, #ff7070, #ff5c5c);
+        }
+
+        .title-button:active {
+            background: linear-gradient(to bottom, #e33e3e, #ff5c5c);
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .button {
+            position: relative;
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 10px 20px;
+            min-width: 150px;
+            margin: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--vista-text);
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            background: linear-gradient(to bottom, #f0f0f0, #e6e6e6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: #ff5c5c;
+            border-radius: 50%;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 92, 92, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(255, 92, 92, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 92, 92, 0);
+            }
+        }
+
+        .settings {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            gap: 15px;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .settings-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            padding: 0;
+            z-index: 1000;
+            animation: modalAppear 0.3s ease-out;
+            max-width: 90%;
+            width: 400px;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .modal.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            background: linear-gradient(to bottom, #2671be, #1e4c9c);
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-icon {
+            font-size: 20px;
+        }
+
+        .modal-content {
+            padding: 20px;
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            background: #f0f0f0;
+            border-top: 1px solid #ddd;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-button {
+            background: linear-gradient(to bottom, #ffffff, #e1e1e1);
+            border: 1px solid #adadad;
+            border-radius: 3px;
+            padding: 7px 20px;
+            min-width: 80px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #000;
+            transition: all 0.2s ease;
+        }
+
+        .modal-button:hover {
+            background: linear-gradient(to bottom, #f0f0f0, #e6e6e6);
+            border-color: #7eb4ea;
+            box-shadow: 0 0 3px rgba(0, 90, 255, 0.3);
+        }
+
+        .modal-button.primary {
+            background: linear-gradient(to bottom, #2671be, #1e4c9c);
+            border-color: #2671be;
+            color: white;
+        }
+
+        .modal-button.primary:hover {
+            background: linear-gradient(to bottom, #2e85d8, #2671be);
+            border-color: #2e85d8;
         }
 
         .cell.win {
-            background-color: #ffcccc;
+            background: linear-gradient(to bottom, #ffe0e0, #ffcccc);
             animation: winAnimation 1s infinite alternate;
-        }
-
-        .cell:active {
-            animation: clickAnimation 0.5s ease;
-        }
-
-        @keyframes swipeLeft {
-            from { left: 100vw; }
-            to { left: 0; }
-        }
-
-        @keyframes swipeUp {
-            from { top: 100vh; }
-            to { top: 0; }
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
         }
 
         @keyframes winAnimation {
             0% { transform: scale(1); }
-            100% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1.1) rotate(3deg); }
         }
 
-        @keyframes clickAnimation {
-            0% { transform: scale(1) rotate(0); }
-            50% { transform: scale(1.1) rotate(20deg); }
-            100% { transform: scale(1) rotate(0); }
-        }
-
-        @keyframes confetti {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            animation: confetti 2s infinite;
-        }
-
-        .bottom-menu {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .turn-indicator {
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin: 10px auto;
+            font-size: 0.9em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 120px;
+            height: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .turn-text {
             position: absolute;
-            top: 10px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: slideInNext 0.3s ease-out;
+            background: inherit;
+        }
+
+        .turn-text.prev {
+            animation: slideOutPrev 0.3s ease-out;
+        }
+
+        @keyframes slideInNext {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOutPrev {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-100%);
+            }
+        }
+
+        .bottom-menu {
+            display: none !important;
+        }
+
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .game-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .side-panel {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .window {
+                width: 98%;
+                margin: 10px auto;
+            }
+
+            .board {
+                gap: 5px;
+                padding: 10px;
+            }
+
+            .button {
+                min-width: 120px;
+                padding: 8px 16px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes cardShuffle {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) rotate(-10deg);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(10px) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+
+        .instructions {
+            display: none;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: calc(100vh - 100px);
+            position: relative;
+        }
+
+        .instructions-content {
+            background: var(--vista-window);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 60px;
+            box-shadow: var(--vista-shadow);
+        }
+
+        .instructions-footer {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .modal {
+            background: var(--modal-bg);
+            color: var(--modal-text);
+        }
+
+        .modal-content {
+            color: var(--modal-text);
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--vista-bg);
+            overflow: hidden;
+        }
+
+        .bg-light {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotateBg 20s linear infinite;
+            transform-origin: center;
+        }
+
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleFloat 15s infinite;
+        }
+
+        .particle.small {
+            width: 4px;
+            height: 4px;
+        }
+
+        .particle.medium {
+            width: 6px;
+            height: 6px;
+        }
+
+        .particle.large {
+            width: 8px;
+            height: 8px;
+        }
+
+        .particle.glow {
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            filter: brightness(1.5);
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translate(var(--start-x), 100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+                transform: translate(calc(var(--start-x) + 20px), 80vh) rotate(120deg) scale(1.2);
+            }
+            45% {
+                transform: translate(calc(var(--start-x) - 20px), 40vh) rotate(240deg) scale(0.8);
+            }
+            80% {
+                opacity: 0.8;
+                transform: translate(calc(var(--start-x) + 10px), 20vh) rotate(360deg) scale(1.1);
+            }
+            100% {
+                transform: translate(var(--start-x), -20px) rotate(480deg) scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            75% { transform: rotate(270deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes placePiece {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) translateY(-50px) rotate(-180deg);
+            }
+            60% {
+                transform: scale(1.2) translateY(0) rotate(10deg);
+            }
+            80% {
+                transform: scale(0.9) rotate(-5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            top: -20px;
+        }
+
+        .confetti.circle {
+            border-radius: 50%;
+        }
+
+        .confetti.rectangle {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .confetti.triangle {
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+
+        .confetti.star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(120vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .terminal {
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            color: #00ff00;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 0 0 6px 6px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 12px;
+            border-top: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .terminal-line {
+            margin: 2px 0;
+            opacity: 0;
+            animation: terminalLine 0.3s ease forwards;
+        }
+
+        @keyframes terminalLine {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .terminal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal::-webkit-scrollbar-track {
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .terminal::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 0, 0.3);
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <div class="menu" id="menu">
-        <div class="button" id="playWithBot">Play With Bot</div>
-        <div class="button" id="playWithHuman">Play Local</div>
-        <div class="button" id="howToPlay">How To Play</div>
-        <div class="button" id="settings">Settings</div>
+    <div class="animated-bg">
+        <div class="bg-light"></div>
     </div>
-    <div class="settings" id="settingsMenu">
-        <div class="settings-box">
-            <p>Enter Grid Size:</p>
-            <input type="number" id="gridSize" min="3" max="10" value="3">
+    <div class="water-ripple" id="waterRipple"></div>
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal" id="gameModal">
+        <div class="modal-header">
+            <span class="modal-icon">ℹ️</span>
+            <span id="modalTitle"></span>
         </div>
-        <div class="settings-box">
-            <p>Select AI Difficulty:</p>
-            <select id="aiDifficulty">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                <option value="impossible">Impossible</option>
-            </select>
+        <div class="modal-content" id="modalContent"></div>
+        <div class="modal-buttons">
+            <div class="modal-button primary" id="modalPlayAgain">Play Again</div>
+            <div class="modal-button" id="modalMainMenu">Main Menu</div>
         </div>
-        <div class="settings-box">
-            <p>Choose Emojis:</p>
-            <div id="emojiInputs">
-                <input type="text" class="emoji-input" placeholder="Player 1 Emoji" value="❌">
-                <input type="text" class="emoji-input" placeholder="Player 2 Emoji" value="⭕">
+    </div>
+    <div class="game-container">
+        <div class="main-content">
+            <div class="window">
+                <div class="title-bar">
+                    <span>ToeTacTic</span>
+                    <div class="title-bar-buttons" id="titleBarButtons">
+                    </div>
+                </div>
+                <div class="menu" id="menu">
+                    <div class="button" id="playWithBot">Play With Bot</div>
+                    <div class="button" id="playWithHuman">Play Local</div>
+                    <div class="button" id="howToPlay">How To Play</div>
+                    <div class="button" id="settings">Settings</div>
+                </div>
+                <div class="settings" id="settingsMenu">
+                    <div class="settings-box">
+                        <p>Enter Grid Size:</p>
+                        <input type="number" id="gridSize" min="3" max="10" value="3">
+                    </div>
+                    <div class="settings-box">
+                        <p>Select AI Difficulty:</p>
+                        <select id="aiDifficulty">
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="impossible">Impossible</option>
+                        </select>
+                    </div>
+                    <div class="settings-box">
+                        <p>Choose Emojis:</p>
+                        <div id="emojiInputs">
+                            <input type="text" class="emoji-input" placeholder="Player 1 Emoji" value="❌">
+                            <input type="text" class="emoji-input" placeholder="Player 2 Emoji" value="⭕">
+                        </div>
+                    </div>
+                    <div class="settings-box">
+                        <p>Select Player Count (Local Mode):</p>
+                        <input type="number" id="playerCount" min="2" max="4" value="2">
+                    </div>
+                    <div class="button" id="saveAndReturn">Save & Return</div>
+                </div>
+                <div id="boardContainer">
+                    <div class="game-status">
+                        <div class="turn-indicator" id="turnIndicator">Turn: ❌</div>
+                        <div class="player-order" id="playerQueue"></div>
+                    </div>
+                    <div class="board-scroll-container">
+                        <div class="board" id="board"></div>
+                    </div>
+                    <div class="terminal" id="calculationTerminal"></div>
+                    <div class="bottom-menu" id="gameMenuButton" style="display: none;">
+                        <div class="button" id="backToMainMenu">Menu</div>
+                    </div>
+                </div>
+                <div class="instructions" id="instructions">
+                    <div class="instructions-content">
+                        <div class="instructions-title">How to Play ToeTacTic</div>
+                        <div class="instruction-step" style="--step-index: 0">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Objective:</strong> Unlike traditional Tic-tac-toe, your goal is to LOSE by creating a line of three of your own symbols.
+                            </div>
+                        </div>
+                        <div class="instruction-step" style="--step-index: 1">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Taking Turns:</strong> Players take turns placing their symbols (❌, ⭕, etc.) in empty cells on the grid.
+                            </div>
+                        </div>
+                        <div class="instruction-step" style="--step-index: 2">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>Winning/Losing:</strong> If you create a line of three of your symbols (horizontally, vertically, or diagonally), you lose the game!
+                            </div>
+                        </div>
+                        <div class="instruction-step" style="--step-index: 3">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>Strategy:</strong> Try to force your opponent to create their own line while avoiding creating your own.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="instructions-footer">
+                        <div class="button" id="backToMenu">Back to Menu</div>
+                    </div>
+                </div>
+                <div id="confetti-container"></div>
             </div>
         </div>
-        <div class="settings-box">
-            <p>Select Player Count (Local Mode):</p>
-            <input type="number" id="playerCount" min="2" max="4" value="2">
-        </div>
-        <div class="button" id="saveSettings">Save</div>
-        <div class="button" id="backToMenuFromSettings">Back to Menu</div>
-    </div>
-    <div id="boardContainer">
-        <div class="turn-indicator" id="turnIndicator">Turn: ❌</div>
-        <div class="board" id="board"></div>
-    </div>
-    <div class="instructions" id="instructions">
-        <p>How to Play:</p>
-        <p>The goal is to lose the game by aligning three of your marks (X or O) in a row, column, or diagonal.</p>
-        <div class="button" id="backToMenu">Back to Menu</div>
-    </div>
-    <div id="confetti-container"></div>
-    <div class="bottom-menu" id="gameMenuButton" style="display: none;">
-        <div class="button" id="backToMainMenu">Menu</div>
     </div>
 
     <script>
@@ -194,8 +975,7 @@
         const playWithHuman = document.getElementById('playWithHuman');
         const howToPlay = document.getElementById('howToPlay');
         const settings = document.getElementById('settings');
-        const saveSettings = document.getElementById('saveSettings');
-        const backToMenuFromSettings = document.getElementById('backToMenuFromSettings');
+        const saveAndReturn = document.getElementById('saveAndReturn');
         const backToMenu = document.getElementById('backToMenu');
         const backToMainMenu = document.getElementById('backToMainMenu');
         const gridSizeInput = document.getElementById('gridSize');
@@ -204,6 +984,7 @@
         const emojiInputs = document.getElementById('emojiInputs');
         const turnIndicator = document.getElementById('turnIndicator');
         const gameMenuButton = document.getElementById('gameMenuButton');
+        const titleBarButtons = document.getElementById('titleBarButtons');
         let cells = [];
         let currentPlayerIndex = 0;
         let playerCount = 2;
@@ -213,12 +994,32 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             openMenu(menu);
+            createParticles();
+            const savedMode = localStorage.getItem('themeMode') || 'system';
+            updateTheme(savedMode);
+            
+            // Check if user has seen instructions
+            const hasSeenInstructions = localStorage.getItem('hasSeenInstructions') === 'true';
+            if (!hasSeenInstructions) {
+                addNotificationDot();
+            }
+            
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)')
+                .addEventListener('change', () => {
+                    const savedMode = localStorage.getItem('themeMode') || 'system';
+                    if (savedMode === 'system') {
+                        updateTheme('system');
+                    }
+                });
         });
 
         function openMenu(menu) {
             closeAllMenus();
             menu.style.display = 'flex';
-            menu.style.animation = 'swipeLeft 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards';
+            menu.style.animation = 'fadeIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards';
+            const titleSpan = document.querySelector('.title-bar span');
+            titleSpan.textContent = 'ToeTacTic - Main Menu';
         }
 
         function closeAllMenus() {
@@ -242,6 +1043,12 @@
         });
 
         howToPlay.addEventListener('click', () => {
+            // Remove notification dot and mark as seen
+            const dot = howToPlay.querySelector('.notification-dot');
+            if (dot) {
+                dot.remove();
+            }
+            localStorage.setItem('hasSeenInstructions', 'true');
             openMenu(instructions);
         });
 
@@ -250,7 +1057,7 @@
             updateEmojiInputs();
         });
 
-        saveSettings.addEventListener('click', () => {
+        saveAndReturn.addEventListener('click', () => {
             playerCount = parseInt(playerCountInput.value);
             if (playerCount === 3 && gridSize < 4) {
                 gridSize = 4;
@@ -261,10 +1068,6 @@
             } else {
                 gridSize = parseInt(gridSizeInput.value);
             }
-            openMenu(menu);
-        });
-
-        backToMenuFromSettings.addEventListener('click', () => {
             openMenu(menu);
         });
 
@@ -296,21 +1099,25 @@
             boardContainer.style.display = 'flex';
             board.style.display = 'grid';
             gameMenuButton.style.display = 'block';
+            const terminal = document.getElementById('calculationTerminal');
+            terminal.style.display = playWithBotMode && aiDifficulty.value === 'impossible' ? 'block' : 'none';
+            terminal.innerHTML = '';
             board.innerHTML = '';
             board.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
             board.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
 
-            players = [];
-            const emojis = document.querySelectorAll('.emoji-input');
-            for (let i = 0; i < playerCount; i++) {
-                players.push(emojis[i].value);
-            }
-
             if (playWithBotMode) {
-                players = ['🧬', '🤖'];
+                players = ['❌', '🤖'];
+            } else {
+                players = [];
+                const emojis = document.querySelectorAll('.emoji-input');
+                for (let i = 0; i < playerCount; i++) {
+                    players.push(emojis[i].value);
+                }
             }
 
-            turnIndicator.textContent = `Turn: ${players[0]}`;
+            updateGameTitle();
+            updateTurnIndicator();
 
             cells = [];
             currentPlayerIndex = 0;
@@ -318,42 +1125,75 @@
             for (let i = 0; i < gridSize; i++) {
                 cells[i] = [];
                 for (let j = 0; j < gridSize; j++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell');
-                    cell.dataset.row = i;
-                    cell.dataset.col = j;
-                    cell.addEventListener('click', handleClick);
+                    const cell = createCell(i, j);
                     board.appendChild(cell);
                     cells[i][j] = cell;
                 }
             }
+
+            updatePlayerQueue();
+            
+            // Shuffle animation for player cards
+            const playerCards = document.querySelectorAll('.player-card');
+            playerCards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight; // Trigger reflow
+                card.style.animation = `cardShuffle 0.5s ease-out ${index * 0.1}s backwards`;
+            });
+
+            const menuButton = document.createElement('div');
+            menuButton.className = 'title-button';
+            menuButton.textContent = '✕';
+            menuButton.onclick = () => openMenu(menu);
+            titleBarButtons.innerHTML = '';
+            titleBarButtons.appendChild(menuButton);
+        }
+
+        function createCell(i, j) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.row = i;
+            cell.dataset.col = j;
+            cell.addEventListener('click', handleClick);
+            cell.style.animationDelay = `${(i * gridSize + j) * 0.05}s`;
+            
+            const content = document.createElement('div');
+            content.classList.add('cell-content');
+            cell.appendChild(content);
+            
+            return cell;
         }
 
         function handleClick(event) {
-            const cell = event.target;
+            const cell = event.target.closest('.cell');
+            if (!cell || cell.textContent !== '') return;
+            
             const row = parseInt(cell.dataset.row);
             const col = parseInt(cell.dataset.col);
-
-            if (cell.textContent === '') {
-                cell.textContent = players[currentPlayerIndex];
-                if (checkLose(row, col)) {
-                    setTimeout(() => {
-                        alert(`Player ${players[currentPlayerIndex]} loses! ${players[(currentPlayerIndex + 1) % players.length]} wins!`);
-                        showLosingStreak(row, col);
-                        triggerConfetti();
-                        setTimeout(resetBoard, 2000);
-                    }, 100);
-                } else if (isBoardFull()) {
-                    setTimeout(() => {
-                        alert(`It's a draw!`);
-                        resetBoard();
-                    }, 100);
-                } else {
-                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-                    turnIndicator.textContent = `Turn: ${players[currentPlayerIndex]}`;
-                    if (playWithBotMode && currentPlayerIndex === 1) {
-                        setTimeout(botMove, 500);
-                    }
+            const content = cell.querySelector('.cell-content');
+            
+            content.textContent = players[currentPlayerIndex];
+            cell.classList.add('placed');
+            
+            if (checkLose(row, col)) {
+                setTimeout(() => {
+                    showGameModal(
+                        'Game Over',
+                        `Player ${players[(currentPlayerIndex + 1) % players.length]} wins! ${players[currentPlayerIndex]} loses!`
+                    );
+                    showLosingStreak(row, col);
+                    startContinuousConfetti();
+                }, 100);
+            } else if (isBoardFull()) {
+                setTimeout(() => {
+                    showGameModal('Game Over', "It's a draw!");
+                }, 100);
+            } else {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateTurnIndicator();
+                updatePlayerQueue();
+                if (playWithBotMode && currentPlayerIndex === 1) {
+                    setTimeout(botMove, 500);
                 }
             }
         }
@@ -361,7 +1201,7 @@
         function isBoardFull() {
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
-                    if (cells[i][j].textContent === '') {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
                         return false;
                     }
                 }
@@ -370,37 +1210,52 @@
         }
 
         function checkLose(row, col) {
-            return (
+            const result = (
                 checkDirection(row, col, 1, 0) ||
                 checkDirection(row, col, 0, 1) ||
                 checkDirection(row, col, 1, 1) ||
                 checkDirection(row, col, 1, -1)
             );
+            return result;
         }
 
         function checkDirection(row, col, rowDir, colDir) {
             let count = 1;
             let winCells = [{ row, col }];
+            const cellContent = cells[row][col].querySelector('.cell-content').textContent;
 
+            // Only check if the current cell has a value
+            if (!cellContent) {
+                return false;
+            }
+
+            // Forward check
             for (let i = 1; i < 3; i++) {
                 const r = row + i * rowDir;
                 const c = col + i * colDir;
-                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize && cells[r][c].textContent === players[currentPlayerIndex]) {
-                    count++;
-                    winCells.push({ row: r, col: c });
-                } else {
-                    break;
+                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
+                    const nextContent = cells[r][c].querySelector('.cell-content').textContent;
+                    if (nextContent === cellContent) {
+                        count++;
+                        winCells.push({ row: r, col: c });
+                    } else {
+                        break;
+                    }
                 }
             }
 
+            // Backward check
             for (let i = 1; i < 3; i++) {
                 const r = row - i * rowDir;
                 const c = col - i * colDir;
-                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize && cells[r][c].textContent === players[currentPlayerIndex]) {
-                    count++;
-                    winCells.push({ row: r, col: c });
-                } else {
-                    break;
+                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
+                    const nextContent = cells[r][c].querySelector('.cell-content').textContent;
+                    if (nextContent === cellContent) {
+                        count++;
+                        winCells.push({ row: r, col: c });
+                    } else {
+                        break;
+                    }
                 }
             }
 
@@ -421,47 +1276,505 @@
 
         function resetBoard() {
             cells.forEach(row => row.forEach(cell => {
-                cell.textContent = '';
+                cell.querySelector('.cell-content').textContent = '';
                 cell.classList.remove('win');
             }));
             currentPlayerIndex = 0;
-            turnIndicator.textContent = `Turn: ${players[0]}`;
+            updateTurnIndicator();
+            updatePlayerQueue();
         }
 
         function botMove() {
+            if (aiDifficulty.value === 'impossible') {
+                botMoveImpossible();
+                return;
+            }
+
+            const difficulty = aiDifficulty.value;
+            let cell;
+
+            switch (difficulty) {
+                case 'hard':
+                    // 80% chance of making the best move
+                    cell = Math.random() < 0.8 ? findBestMove() : makeRandomMove();
+                    break;
+                case 'medium':
+                    // 50% chance of making the best move
+                    cell = Math.random() < 0.5 ? findBestMove() : makeRandomMove();
+                    break;
+                case 'easy':
+                default:
+                    // 20% chance of making the best move
+                    cell = Math.random() < 0.2 ? findBestMove() : makeRandomMove();
+                    break;
+            }
+
+            if (cell) {
+                setTimeout(() => makeMove(cell), 500);
+            }
+        }
+
+        function makeMove(cell) {
+            if (!cell) return;
+            
+            const content = cell.querySelector('.cell-content');
+            content.textContent = players[1];
+            cell.classList.add('placed');
+            
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            if (checkLose(row, col)) {
+                setTimeout(() => {
+                    showGameModal(
+                        'Game Over',
+                        `Player ${players[0]} wins! ${players[1]} loses!`
+                    );
+                    showLosingStreak(row, col);
+                    startContinuousConfetti();
+                }, 100);
+                return; // Add return to prevent further execution
+            } else if (isBoardFull()) {
+                setTimeout(() => {
+                    showGameModal('Game Over', "It's a draw!");
+                }, 100);
+                return; // Add return to prevent further execution
+            }
+            
+            currentPlayerIndex = 0;
+            updateTurnIndicator();
+            updatePlayerQueue();
+        }
+
+        function makeRandomMove() {
             const emptyCells = [];
             for (const row of cells) {
-                for (const cell of row) {
-                    if (cell.textContent === '') {
-                        emptyCells.push(cell);
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        emptyCells.push(cells[i][j]);
+                    }
+                }
+            }
+            return emptyCells.length > 0 ? emptyCells[Math.floor(Math.random() * emptyCells.length)] : null;
+        }
+
+        function findBestMove() {
+            let bestScore = -Infinity;
+            let bestMove = null;
+
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        cells[i][j].querySelector('.cell-content').textContent = players[1];
+                        let score = minimax(cells, 0, false, -Infinity, Infinity, 3);
+                        cells[i][j].querySelector('.cell-content').textContent = '';
+                        
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = cells[i][j];
+                        }
                     }
                 }
             }
 
-            if (emptyCells.length > 0) {
-                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                randomCell.textContent = players[1];
-                const row = parseInt(randomCell.dataset.row);
-                const col = parseInt(randomCell.dataset.col);
-                if (checkLose(row, col)) {
-                    setTimeout(() => {
-                        alert(`Player ${players[1]} loses! ${players[0]} wins!`);
-                        showLosingStreak(row, col);
-                        triggerConfetti();
-                        setTimeout(resetBoard, 2000);
-                    }, 100);
-                } else {
-                    currentPlayerIndex = 0;
-                    turnIndicator.textContent = `Turn: ${players[currentPlayerIndex]}`;
-                }
+            return bestMove;
+        }
+
+        function botMoveImpossible() {
+            const bestMove = findBestMoveImpossible();
+            if (bestMove) {
+                makeMove(bestMove);
             }
         }
 
-        // Add the logic for Impossible mode
-        function botMoveImpossible() {
-            // Implement impossible mode logic here
-            // For now, we'll just call botMove as a placeholder
-            botMove();
+        function findBestMoveImpossible() {
+            let bestScore = -Infinity;
+            let bestMove = null;
+            const terminal = document.getElementById('calculationTerminal');
+            terminal.innerHTML = '';
+            addTerminalLine('🤖 Calculating optimal move...');
+
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        cells[i][j].querySelector('.cell-content').textContent = players[1];
+                        let score = minimax(cells, 0, false, -Infinity, Infinity, 6);
+                        cells[i][j].querySelector('.cell-content').textContent = '';
+                        
+                        addTerminalLine(`Evaluating position (${i},${j}): Score = ${score}`);
+                        
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = cells[i][j];
+                            addTerminalLine(`✨ New best move found at (${i},${j}) with score ${score}`);
+                        }
+                    }
+                }
+            }
+
+            addTerminalLine(`🎯 Selected move with score: ${bestScore}`);
+            return bestMove;
+        }
+
+        function addTerminalLine(text) {
+            const terminal = document.getElementById('calculationTerminal');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.textContent = text;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+
+            // Keep only the last 50 lines
+            while (terminal.children.length > 50) {
+                terminal.removeChild(terminal.firstChild);
+            }
+        }
+
+        function minimax(board, depth, isMaximizing, alpha, beta, maxDepth) {
+            if (depth === 0) {
+                addTerminalLine(`↳ Depth ${depth}: Starting evaluation...`);
+            }
+
+            const result = checkGameState();
+            if (result !== null) {
+                return result;
+            }
+
+            if (isMaximizing) {
+                let maxScore = -Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[1];
+                            let score = minimax(board, depth + 1, false, alpha, beta, maxDepth);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            maxScore = Math.max(score, maxScore);
+                            alpha = Math.max(alpha, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                }
+                return maxScore;
+            } else {
+                let minScore = Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[0];
+                            let score = minimax(board, depth + 1, true, alpha, beta, maxDepth);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            minScore = Math.min(score, minScore);
+                            beta = Math.min(beta, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                }
+                return minScore;
+            }
+        }
+
+        function evaluateBoard(board) {
+            let score = 0;
+            
+            // Evaluate rows, columns, and diagonals
+            for (let i = 0; i < gridSize; i++) {
+                score += evaluateLine(getRow(i));
+                score += evaluateLine(getColumn(i));
+            }
+            
+            score += evaluateLine(getDiagonal());
+            score += evaluateLine(getAntiDiagonal());
+            
+            return score;
+        }
+
+        function evaluateLine(line) {
+            const botSymbol = players[1];
+            const playerSymbol = players[0];
+            
+            let score = 0;
+            let botCount = 0;
+            let playerCount = 0;
+            let emptyCount = 0;
+
+            line.forEach(cell => {
+                if (cell === botSymbol) botCount++;
+                else if (cell === playerSymbol) playerCount++;
+                else emptyCount++;
+            });
+
+            // Scoring based on piece configurations
+            if (botCount === 2 && emptyCount === 1) score += 10;
+            if (playerCount === 2 && emptyCount === 1) score -= 8;
+            if (botCount === 1 && emptyCount === 2) score += 3;
+            if (playerCount === 1 && emptyCount === 2) score -= 2;
+
+            return score;
+        }
+
+        function getRow(row) {
+            return cells[row].map(cell => cell.querySelector('.cell-content').textContent);
+        }
+
+        function getColumn(col) {
+            return cells.map(row => row[col].querySelector('.cell-content').textContent);
+        }
+
+        function getDiagonal() {
+            return cells.map((row, i) => cells[i][i].querySelector('.cell-content').textContent);
+        }
+
+        function getAntiDiagonal() {
+            return cells.map((row, i) => cells[i][gridSize - 1 - i].querySelector('.cell-content').textContent);
+        }
+
+        function checkGameState() {
+            // Check for win/lose conditions
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent !== '' && checkLose(i, j)) {
+                        return cells[i][j].querySelector('.cell-content').textContent === players[1] ? -100 : 100;
+                    }
+                }
+            }
+            
+            // Check for draw
+            if (isBoardFull()) {
+                return 0;
+            }
+            
+            return null;
+        }
+
+        let confettiInterval;
+
+        function startContinuousConfetti() {
+            // Clear any existing confetti and interval
+            stopConfetti();
+            
+            confettiInterval = setInterval(() => {
+                createConfettiWave();
+            }, 500);
+        }
+
+        function stopConfetti() {
+            clearInterval(confettiInterval);
+            confettiContainer.innerHTML = '';
+        }
+
+        function createConfettiWave() {
+            const shapes = ['circle', 'rectangle', 'triangle', 'star'];
+            const colors = [
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
+                '#FFEEAD', '#D4A5A5', '#9B59B6', '#3498DB',
+                '#FFD93D', '#FF8C42', '#4CAF50', '#E74C3C'
+            ];
+            
+            for (let i = 0; i < 10; i++) {
+                const confetti = document.createElement('div');
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.className = `confetti ${shape}`;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.background = color;
+                confetti.style.transform = `scale(${0.8 + Math.random() * 0.5})`;
+                confetti.style.animation = `confettiFall ${1.5 + Math.random()}s linear forwards`;
+                
+                confettiContainer.appendChild(confetti);
+                
+                // Remove confetti after animation
+                confetti.addEventListener('animationend', () => {
+                    confetti.remove();
+                });
+            }
+        }
+
+        // Add water ripple effect
+        const waterRipple = document.getElementById('waterRipple');
+        
+        document.addEventListener('mousemove', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            waterRipple.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1500);
+        });
+
+        // Update player queue display
+        function updatePlayerQueue() {
+            const playerQueue = document.getElementById('playerQueue');
+            playerQueue.innerHTML = '';
+            
+            players.forEach((player, index) => {
+                const playerCard = document.createElement('div');
+                playerCard.className = `player-card ${index === currentPlayerIndex ? 'active' : ''}`;
+                playerCard.innerHTML = `
+                    <div class="player-emoji">${player}</div>
+                    <div>Player ${index + 1}</div>
+                `;
+                playerQueue.appendChild(playerCard);
+            });
+        }
+
+        // Update modal functionality
+        const modalOverlay = document.getElementById('modalOverlay');
+        const gameModal = document.getElementById('gameModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalPlayAgain = document.getElementById('modalPlayAgain');
+        const modalMainMenu = document.getElementById('modalMainMenu');
+
+        function showGameModal(title, content) {
+            modalTitle.textContent = title;
+            modalContent.textContent = content;
+            modalOverlay.style.display = 'block';
+            gameModal.style.display = 'block';
+            
+            modalOverlay.offsetHeight;
+            gameModal.offsetHeight;
+            
+            modalOverlay.classList.add('show');
+            gameModal.classList.add('show');
+            
+            modalPlayAgain.onclick = () => {
+                hideModal();
+                stopConfetti();
+                resetBoard();
+            };
+            
+            modalMainMenu.onclick = () => {
+                hideModal();
+                stopConfetti();
+                openMenu(menu);
+            };
+        }
+
+        function hideModal() {
+            modalOverlay.classList.remove('show');
+            gameModal.classList.remove('show');
+            
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+                gameModal.style.display = 'none';
+            }, 300);
+        }
+
+        // Update turn indicator display
+        function updateTurnIndicator() {
+            const turnIndicator = document.getElementById('turnIndicator');
+            const oldTurnText = turnIndicator.querySelector('.turn-text');
+            
+            if (oldTurnText) {
+                oldTurnText.classList.add('prev');
+                setTimeout(() => oldTurnText.remove(), 300);
+            }
+
+            const turnText = document.createElement('div');
+            turnText.className = 'turn-text';
+            turnText.innerHTML = `
+                <span>Turn:</span>
+                <span style="font-size: 1.2em">${players[currentPlayerIndex]}</span>
+            `;
+            turnIndicator.appendChild(turnText);
+        }
+
+        // Add background particles
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'bg-particles';
+            document.querySelector('.animated-bg').appendChild(particlesContainer);
+
+            // Create initial particles - increased from 50 to 100
+            for (let i = 0; i < 100; i++) {
+                createParticle(particlesContainer);
+            }
+
+            // Continuously create new particles - increased spawn rate and max particles
+            setInterval(() => {
+                if (particlesContainer.children.length < 150) {
+                    createParticle(particlesContainer);
+                    // Create multiple particles per interval
+                    if (Math.random() > 0.5) {
+                        createParticle(particlesContainer);
+                    }
+                    if (Math.random() > 0.8) {
+                        createParticle(particlesContainer);
+                    }
+                }
+            }, 500); // Reduced interval from 1000ms to 500ms
+        }
+
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            const size = Math.random();
+            
+            // Adjusted size distribution for more variety
+            if (size < 0.4) {
+                particle.className = 'particle small';
+            } else if (size < 0.8) {
+                particle.className = 'particle medium';
+            } else {
+                particle.className = 'particle large';
+            }
+
+            // Increased chance of glow effect
+            if (Math.random() > 0.3) {
+                particle.classList.add('glow');
+            }
+
+            // Random starting position with wider spread
+            const startX = Math.random() * 120 - 10; // Allow particles to start slightly outside the viewport
+            particle.style.setProperty('--start-x', `${startX}%`);
+            particle.style.left = `${startX}%`;
+            particle.style.bottom = '-20px';
+
+            // More varied animation timing
+            particle.style.animationDelay = `${Math.random() * 1.5}s`;
+            particle.style.animationDuration = `${6 + Math.random() * 9}s`; // Adjusted range for more variety
+
+            container.appendChild(particle);
+
+            // Remove particle after animation
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+            });
+        }
+
+        function updateTheme(mode) {
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const shouldUseDarkMode = 
+                mode === 'dark' || 
+                (mode === 'system' && darkModeMediaQuery.matches);
+            
+            if (shouldUseDarkMode) {
+                document.documentElement.classList.add('dark-mode');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+            }
+        }
+
+        function updateGameTitle() {
+            const titleSpan = document.querySelector('.title-bar span');
+            if (playWithBotMode) {
+                const difficulty = aiDifficulty.value.charAt(0).toUpperCase() + aiDifficulty.value.slice(1);
+                titleSpan.textContent = `ToeTacTic - vs Bot (${difficulty})`;
+            } else {
+                titleSpan.textContent = `ToeTacTic - ${playerCount} Players`;
+            }
+        }
+
+        function addNotificationDot() {
+            const howToPlayButton = document.getElementById('howToPlay');
+            if (!howToPlayButton.querySelector('.notification-dot')) {
+                const dot = document.createElement('div');
+                dot.className = 'notification-dot';
+                howToPlayButton.appendChild(dot);
+            }
         }
     </script>
 </body>
