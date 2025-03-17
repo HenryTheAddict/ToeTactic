@@ -1116,12 +1116,18 @@
                 }
             }
 
+            // Randomly select first player
+            currentPlayerIndex = Math.floor(Math.random() * players.length);
+            
+            // If bot is randomly selected to go first, make its move
+            if (playWithBotMode && currentPlayerIndex === 1) {
+                setTimeout(botMove, 1000);
+            }
+
             updateGameTitle();
             updateTurnIndicator();
 
             cells = [];
-            currentPlayerIndex = 0;
-
             for (let i = 0; i < gridSize; i++) {
                 cells[i] = [];
                 for (let j = 0; j < gridSize; j++) {
@@ -1209,23 +1215,22 @@
             return true;
         }
 
-        function checkLose(row, col) {
+        function checkLose(row, col, visualUpdate = true) {
             const result = (
-                checkDirection(row, col, 1, 0) ||
-                checkDirection(row, col, 0, 1) ||
-                checkDirection(row, col, 1, 1) ||
-                checkDirection(row, col, 1, -1)
+                checkDirection(row, col, 1, 0, visualUpdate) ||
+                checkDirection(row, col, 0, 1, visualUpdate) ||
+                checkDirection(row, col, 1, 1, visualUpdate) ||
+                checkDirection(row, col, 1, -1, visualUpdate)
             );
             return result;
         }
 
-        function checkDirection(row, col, rowDir, colDir) {
+        function checkDirection(row, col, rowDir, colDir, visualUpdate = true) {
             let count = 1;
             let winCells = [{ row, col }];
-            const cellContent = cells[row][col].querySelector('.cell-content').textContent;
+            const currentSymbol = cells[row][col].querySelector('.cell-content').textContent;
 
-            // Only check if the current cell has a value
-            if (!cellContent) {
+            if (!currentSymbol) {
                 return false;
             }
 
@@ -1235,7 +1240,8 @@
                 const c = col + i * colDir;
                 if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
                     const nextContent = cells[r][c].querySelector('.cell-content').textContent;
-                    if (nextContent === cellContent) {
+                    // Only count if it's the same symbol as the current player
+                    if (nextContent === currentSymbol) {
                         count++;
                         winCells.push({ row: r, col: c });
                     } else {
@@ -1250,7 +1256,8 @@
                 const c = col - i * colDir;
                 if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
                     const nextContent = cells[r][c].querySelector('.cell-content').textContent;
-                    if (nextContent === cellContent) {
+                    // Only count if it's the same symbol as the current player
+                    if (nextContent === currentSymbol) {
                         count++;
                         winCells.push({ row: r, col: c });
                     } else {
@@ -1259,8 +1266,11 @@
                 }
             }
 
-            if (count >= 3) {
-                winCells.forEach(cell => cells[cell.row][cell.col].classList.add('win'));
+            // Only trigger win condition if all three symbols belong to the current player
+            if (count >= 3 && currentSymbol === players[currentPlayerIndex]) {
+                if (visualUpdate) {
+                    winCells.forEach(cell => cells[cell.row][cell.col].classList.add('win'));
+                }
                 return true;
             }
             return false;
@@ -1433,6 +1443,16 @@
         function minimax(board, depth, isMaximizing, alpha, beta, maxDepth) {
             if (depth === 0) {
                 addTerminalLine(`↳ Depth ${depth}: Starting evaluation...`);
+            }
+
+            // Check for win/lose conditions without visual updates
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent !== '' && 
+                        checkLose(i, j, false)) {
+                        return cells[i][j].querySelector('.cell-content').textContent === players[1] ? -100 : 100;
+                    }
+                }
             }
 
             const result = checkGameState();
