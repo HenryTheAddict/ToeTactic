@@ -851,6 +851,247 @@
             background: rgba(0, 255, 0, 0.3);
             border-radius: 3px;
         }
+
+        /* Theme Variables */
+        :root {
+            /* Default Vista Theme */
+            --window-bg: rgba(255, 255, 255, 0.85);
+            --window-border: rgba(255, 255, 255, 0.5);
+            --button-gradient: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            --button-border: rgba(0, 0, 0, 0.1);
+            --title-bar-gradient: linear-gradient(to bottom, #2671be, #1e4c9c);
+            --cell-gradient: linear-gradient(to bottom, #ffffff, #f0f0f0);
+        }
+
+        /* Windows 98 Theme */
+        :root[data-theme="win98"] {
+            --window-bg: #c0c0c0;
+            --window-border: #808080;
+            --button-gradient: #c0c0c0;
+            --button-border: #808080;
+            --title-bar-gradient: #000080;
+            --cell-gradient: #c0c0c0;
+        }
+
+        /* Mac OS Aqua Theme */
+        :root[data-theme="aqua"] {
+            --window-bg: rgba(255, 255, 255, 0.9);
+            --window-border: rgba(0, 156, 255, 0.5);
+            --button-gradient: linear-gradient(to bottom, #4BB3FF, #007AFF);
+            --button-border: rgba(0, 122, 255, 0.5);
+            --title-bar-gradient: linear-gradient(to bottom, #B4D8FF, #77B3F3);
+            --cell-gradient: linear-gradient(to bottom, #ffffff, #f5f5f5);
+        }
+
+        /* Theme-specific styles */
+        .window {
+            background: var(--window-bg);
+            border: 1px solid var(--window-border);
+        }
+
+        .title-bar {
+            background: var(--title-bar-gradient);
+        }
+
+        /* Windows 98 specific styles */
+        [data-theme="win98"] .window {
+            border-width: 2px;
+            border-style: solid;
+            border-color: #dfdfdf #404040 #404040 #dfdfdf;
+            box-shadow: 1px 1px 0 #000000;
+        }
+
+        [data-theme="win98"] .button {
+            border-width: 2px;
+            border-style: solid;
+            border-color: #dfdfdf #404040 #404040 #dfdfdf;
+            background: #c0c0c0;
+            box-shadow: 1px 1px 0 #000000;
+            padding: 4px 10px;
+        }
+
+        [data-theme="win98"] .cell {
+            border-width: 2px;
+            border-style: solid;
+            border-color: #dfdfdf #404040 #404040 #dfdfdf;
+        }
+
+        [data-theme="win98"] .title-bar {
+            padding: 2px 3px;
+            font-weight: bold;
+            color: white;
+            background: #000080;
+        }
+
+        /* Mac OS Aqua specific styles */
+        [data-theme="aqua"] .window {
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="aqua"] .button {
+            border-radius: 20px;
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="aqua"] .cell {
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="aqua"] .title-bar {
+            border-radius: 10px 10px 0 0;
+            color: #000;
+            font-weight: 500;
+        }
+
+        /* Theme transition effects */
+        * {
+            transition: all 0.3s ease;
+        }
+
+        @keyframes themeTransition {
+            0% { opacity: 0.8; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Windows 98 button styles */
+        .win98-button {
+            width: 16px;
+            height: 14px;
+            margin-left: 2px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #dfdfdf #404040 #404040 #dfdfdf;
+            background: #c0c0c0;
+            font-size: 9px;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .win98-button:active {
+            border-color: #404040 #dfdfdf #dfdfdf #404040;
+        }
+
+        /* Mac OS Aqua window controls */
+        [data-theme="aqua"] .title-bar-buttons {
+            display: flex;
+            gap: 6px;
+            margin-left: 8px;
+        }
+
+        [data-theme="aqua"] .title-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            padding: 0;
+        }
+
+        [data-theme="aqua"] .title-button.close {
+            background: #ff5f57;
+        }
+
+        [data-theme="aqua"] .title-button.minimize {
+            background: #febc2e;
+        }
+
+        [data-theme="aqua"] .title-button.maximize {
+            background: #28c840;
+        }
+
+        /* Add these styles */
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .audio-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        /* Theme-specific volume slider styles */
+        [data-theme="win98"] .volume-slider {
+            height: 20px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #808080 #dfdfdf #dfdfdf #808080;
+        }
+
+        [data-theme="aqua"] .volume-slider {
+            background: linear-gradient(to right, #007AFF, #4BB3FF);
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        [data-theme="win98"] .volume-slider::-webkit-slider-thumb {
+            width: 20px;
+            height: 20px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+            border-radius: 0;
+        }
+
+        [data-theme="aqua"] .volume-slider::-webkit-slider-thumb {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 18px;
+            height: 18px;
+        }
+
+        .audio-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        [data-theme="win98"] .audio-toggle input[type="checkbox"] {
+            border: 2px solid;
+            border-color: #808080 #dfdfdf #dfdfdf #808080;
+            background: #fff;
+        }
+
+        [data-theme="aqua"] .audio-toggle input[type="checkbox"] {
+            border-radius: 4px;
+            border: 2px solid #007AFF;
+        }
+
+        .volume-value {
+            min-width: 45px;
+        }
     </style>
 </head>
 <body>
@@ -908,6 +1149,34 @@
                     <div class="settings-box">
                         <p>Select Player Count (Local Mode):</p>
                         <input type="number" id="playerCount" min="2" max="4" value="2">
+                    </div>
+                    <div class="settings-box">
+                        <p>Select Theme:</p>
+                        <select id="themeSelector">
+                            <option value="default">Default (Vista)</option>
+                            <option value="win98">Windows 98</option>
+                            <option value="aqua">Mac OS Aqua</option>
+                        </select>
+                    </div>
+                    <!-- Add this in the settings section, after the theme selector -->
+                    <div class="settings-box">
+                        <p>Audio Settings:</p>
+                        <div class="audio-controls">
+                            <div class="audio-control">
+                                <label for="masterVolume">Master Volume:</label>
+                                <input type="range" id="masterVolume" min="0" max="100" value="50" class="volume-slider">
+                                <span class="volume-value">50%</span>
+                            </div>
+                            <div class="audio-control">
+                                <label for="musicVolume">Music Volume:</label>
+                                <input type="range" id="musicVolume" min="0" max="100" value="50" class="volume-slider">
+                                <span class="volume-value">50%</span>
+                            </div>
+                            <div class="audio-toggle">
+                                <label for="audioEnabled">Enable Audio:</label>
+                                <input type="checkbox" id="audioEnabled" checked>
+                            </div>
+                        </div>
                     </div>
                     <div class="button" id="saveAndReturn">Save & Return</div>
                 </div>
@@ -989,8 +1258,58 @@
         let players = [];
         let playWithBotMode = false;
 
+        // Add these variables at the top with your other declarations
+        let masterVolume = 0.5;
+        let musicVolume = 0.5;
+        let audioEnabled = true;
+
+        // Add this function to initialize audio settings
+        function initializeAudioSettings() {
+            const masterVolumeSlider = document.getElementById('masterVolume');
+            const musicVolumeSlider = document.getElementById('musicVolume');
+            const audioEnabledToggle = document.getElementById('audioEnabled');
+            const volumeValues = document.querySelectorAll('.volume-value');
+
+            // Load saved settings
+            masterVolume = parseFloat(localStorage.getItem('masterVolume') || 0.5);
+            musicVolume = parseFloat(localStorage.getItem('musicVolume') || 0.5);
+            audioEnabled = localStorage.getItem('audioEnabled') !== 'false';
+
+            // Update UI
+            masterVolumeSlider.value = masterVolume * 100;
+            musicVolumeSlider.value = musicVolume * 100;
+            audioEnabledToggle.checked = audioEnabled;
+            volumeValues[0].textContent = `${Math.round(masterVolume * 100)}%`;
+            volumeValues[1].textContent = `${Math.round(musicVolume * 100)}%`;
+
+            // Add event listeners
+            masterVolumeSlider.addEventListener('input', (e) => {
+                masterVolume = e.target.value / 100;
+                volumeValues[0].textContent = `${e.target.value}%`;
+                updateAudioVolumes();
+                localStorage.setItem('masterVolume', masterVolume);
+            });
+
+            musicVolumeSlider.addEventListener('input', (e) => {
+                musicVolume = e.target.value / 100;
+                volumeValues[1].textContent = `${e.target.value}%`;
+                updateAudioVolumes();
+                localStorage.setItem('musicVolume', musicVolume);
+            });
+
+            audioEnabledToggle.addEventListener('change', (e) => {
+                audioEnabled = e.target.checked;
+                updateAudioVolumes();
+                localStorage.setItem('audioEnabled', audioEnabled);
+            });
+
+            // Initial volume update
+            updateAudioVolumes();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             addAudioElements();
+            initializeAudioSettings(); // Add this line
             addMusicToggle();
             openMenu(menu);
             createParticles();
@@ -1011,6 +1330,8 @@
                         updateTheme('system');
                     }
                 });
+
+            initializeThemeSelector();
         });
 
         function addAudioElements() {
@@ -1040,6 +1361,7 @@
             playMusic('titleMusic');
         }
 
+        // Update the existing playMusic function
         function playMusic(id) {
             const audios = ['titleMusic', 'botMusic', 'localMusic'];
             const fadeDuration = 1000;
@@ -1047,10 +1369,10 @@
             // Start playing the new track if it's not already playing
             const newAudio = document.getElementById(id);
             if (newAudio) {
-                if (newAudio.paused) {
+                if (newAudio.paused && audioEnabled) {
                     newAudio.play().catch(error => console.log('Audio playback failed:', error));
                 }
-                fadeAudio(newAudio, 0.5, fadeDuration);
+                fadeAudio(newAudio, audioEnabled ? (masterVolume * musicVolume) : 0, fadeDuration);
             }
             
             // Fade out and pause other tracks
@@ -1923,40 +2245,25 @@
             });
         }
 
+        // Update the existing addMusicToggle function
         function addMusicToggle() {
             const titleBarButtons = document.querySelector('.title-bar-buttons');
-            const fadeDuration = 1000;
             
             // Create music toggle button
             const musicButton = document.createElement('div');
             musicButton.className = 'title-button music-button';
-            musicButton.innerHTML = '🔊';
-            musicButton.style.background = 'linear-gradient(to bottom, #4CAF50, #45a049)';
+            musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
+            musicButton.style.background = audioEnabled ? 
+                'linear-gradient(to bottom, #4CAF50, #45a049)' : 
+                'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
             musicButton.style.marginRight = '8px';
-            
-            let isMuted = false;
-            let previousVolumes = new Map(); // Store previous volumes for unmuting
             
             musicButton.onclick = (e) => {
                 e.stopPropagation();
-                isMuted = !isMuted;
-                musicButton.innerHTML = isMuted ? '🔇' : '🔊';
-                musicButton.style.background = isMuted ? 
-                    'linear-gradient(to bottom, #ff5c5c, #e33e3e)' : 
-                    'linear-gradient(to bottom, #4CAF50, #45a049)';
-                
-                ['titleMusic', 'botMusic', 'localMusic'].forEach(id => {
-                    const audio = document.getElementById(id);
-                    if (audio) {
-                        if (isMuted) {
-                            previousVolumes.set(id, audio.volume);
-                            fadeAudio(audio, 0, fadeDuration);
-                        } else {
-                            const previousVolume = previousVolumes.get(id) ?? 0.5;
-                            fadeAudio(audio, previousVolume, fadeDuration);
-                        }
-                    }
-                });
+                audioEnabled = !audioEnabled;
+                document.getElementById('audioEnabled').checked = audioEnabled;
+                localStorage.setItem('audioEnabled', audioEnabled);
+                updateAudioVolumes();
             };
             
             // Create close button
@@ -1970,6 +2277,74 @@
             titleBarButtons.appendChild(musicButton);
             titleBarButtons.appendChild(closeButton);
         }
+
+        // Add this function to update all audio volumes
+        function updateAudioVolumes() {
+            const finalVolume = audioEnabled ? (masterVolume * musicVolume) : 0;
+            ['titleMusic', 'botMusic', 'localMusic'].forEach(id => {
+                const audio = document.getElementById(id);
+                if (audio) {
+                    fadeAudio(audio, finalVolume, 300);
+                }
+            });
+
+            // Update music toggle button appearance
+            const musicButton = document.querySelector('.music-button');
+            if (musicButton) {
+                musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
+                musicButton.style.background = audioEnabled ? 
+                    'linear-gradient(to bottom, #4CAF50, #45a049)' : 
+                    'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
+            }
+        }
+
+        function initializeThemeSelector() {
+            const themeSelector = document.getElementById('themeSelector');
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('gameTheme') || 'default';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeSelector.value = savedTheme;
+
+            // Handle theme changes
+            themeSelector.addEventListener('change', (e) => {
+                const theme = e.target.value;
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('gameTheme', theme);
+                
+                // Add theme change animation
+                document.body.style.animation = 'themeTransition 0.3s ease';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 300);
+            });
+        }
+
+        // Add this function to create Windows 98 style icons
+        function createWin98Icons() {
+            if (document.documentElement.getAttribute('data-theme') === 'win98') {
+                const titleBarButtons = document.getElementById('titleBarButtons');
+                titleBarButtons.innerHTML = `
+                    <button class="win98-button minimize">_</button>
+                    <button class="win98-button maximize">□</button>
+                    <button class="win98-button close">×</button>
+                `;
+            }
+        }
+
+        // Add observer to update icons when theme changes
+        const themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'data-theme') {
+                    createWin98Icons();
+                }
+            });
+        });
+
+        themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
     </script>
 </body>
 </html>
