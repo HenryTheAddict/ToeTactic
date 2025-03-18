@@ -233,11 +233,16 @@
             align-items: center;
             font-size: 2em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            animation: cellAppear 0.3s ease-out backwards;
+            transition: all 0.1s ease;
             position: relative;
             overflow: hidden;
+            transform: translate(0, 0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .cell:hover {
+            transform: scale(1.02);
+            z-index: 1;
         }
 
         .cell-content {
@@ -296,29 +301,21 @@
         .title-bar-buttons {
             display: flex;
             gap: 8px;
+            align-items: center;
         }
 
         .title-button {
-            background: linear-gradient(to bottom, #ff5c5c, #e33e3e);
-            color: white;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-            width: 20px;
-            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
-            font-size: 14px;
             transition: all 0.2s ease;
         }
 
-        .title-button:hover {
-            background: linear-gradient(to bottom, #ff7070, #ff5c5c);
-        }
-
-        .title-button:active {
-            background: linear-gradient(to bottom, #e33e3e, #ff5c5c);
+        .music-button {
+            font-size: 12px;
         }
 
         .menu {
@@ -993,6 +990,8 @@
         let playWithBotMode = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            addAudioElements();
+            addMusicToggle();
             openMenu(menu);
             createParticles();
             const savedMode = localStorage.getItem('themeMode') || 'system';
@@ -1014,12 +1013,99 @@
                 });
         });
 
+        function addAudioElements() {
+            // Add audio elements to the page
+            const audioContainer = document.createElement('div');
+            audioContainer.style.display = 'none';
+            audioContainer.innerHTML = `
+                <audio id="titleMusic" loop>
+                    <source src="game title.mp3" type="audio/mpeg">
+                </audio>
+                <audio id="botMusic" loop>
+                    <source src="game bot.mp3" type="audio/mpeg">
+                </audio>
+                <audio id="localMusic" loop>
+                    <source src="game local.mp3" type="audio/mpeg">
+                </audio>
+            `;
+            document.body.appendChild(audioContainer);
+
+            // Initialize all tracks at volume 0
+            ['titleMusic', 'botMusic', 'localMusic'].forEach(id => {
+                const audio = document.getElementById(id);
+                audio.volume = 0;
+            });
+
+            // Start with title music
+            playMusic('titleMusic');
+        }
+
+        function playMusic(id) {
+            const audios = ['titleMusic', 'botMusic', 'localMusic'];
+            const fadeDuration = 1000;
+            
+            // Start playing the new track if it's not already playing
+            const newAudio = document.getElementById(id);
+            if (newAudio) {
+                if (newAudio.paused) {
+                    newAudio.play().catch(error => console.log('Audio playback failed:', error));
+                }
+                fadeAudio(newAudio, 0.5, fadeDuration);
+            }
+            
+            // Fade out and pause other tracks
+            audios.forEach(audioId => {
+                if (audioId !== id) {
+                    const audio = document.getElementById(audioId);
+                    if (audio && !audio.paused) {
+                        fadeAudio(audio, 0, fadeDuration);
+                        setTimeout(() => {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }, fadeDuration);
+                    }
+                }
+            });
+        }
+
+        function fadeAudio(audioElement, targetVolume, duration = 1000) {
+            if (!audioElement) return;
+            
+            const startVolume = audioElement.volume;
+            const volumeDiff = targetVolume - startVolume;
+            const startTime = performance.now();
+            
+            function updateVolume() {
+                const currentTime = performance.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Use easeInOutQuad for smoother volume transition
+                const easeProgress = progress < 0.5
+                    ? 2 * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                
+                audioElement.volume = startVolume + (volumeDiff * easeProgress);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateVolume);
+                }
+            }
+            
+            requestAnimationFrame(updateVolume);
+        }
+
         function openMenu(menu) {
             closeAllMenus();
             menu.style.display = 'flex';
             menu.style.animation = 'fadeIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards';
             const titleSpan = document.querySelector('.title-bar span');
             titleSpan.textContent = 'ToeTacTic - Main Menu';
+            
+            // Play title music when returning to main menu
+            if (menu === document.getElementById('menu')) {
+                playMusic('titleMusic');
+            }
         }
 
         function closeAllMenus() {
@@ -1106,6 +1192,13 @@
             board.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
             board.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
 
+            // Play appropriate music based on game mode
+            if (playWithBotMode) {
+                playMusic('botMusic');
+            } else {
+                playMusic('localMusic');
+            }
+
             if (playWithBotMode) {
                 players = ['❌', '🤖'];
             } else {
@@ -1138,6 +1231,7 @@
             }
 
             updatePlayerQueue();
+            initializeDynamicShadows();
             
             // Shuffle animation for player cards
             const playerCards = document.querySelectorAll('.player-card');
@@ -1147,12 +1241,8 @@
                 card.style.animation = `cardShuffle 0.5s ease-out ${index * 0.1}s backwards`;
             });
 
-            const menuButton = document.createElement('div');
-            menuButton.className = 'title-button';
-            menuButton.textContent = '✕';
-            menuButton.onclick = () => openMenu(menu);
             titleBarButtons.innerHTML = '';
-            titleBarButtons.appendChild(menuButton);
+            addMusicToggle();
         }
 
         function createCell(i, j) {
@@ -1795,6 +1885,90 @@
                 dot.className = 'notification-dot';
                 howToPlayButton.appendChild(dot);
             }
+        }
+
+        // Add this function after createParticles()
+        function initializeDynamicShadows() {
+            const board = document.getElementById('board');
+            const cells = document.querySelectorAll('.cell');
+            
+            document.addEventListener('mousemove', (e) => {
+                cells.forEach(cell => {
+                    const rect = cell.getBoundingClientRect();
+                    const cellCenterX = rect.left + rect.width / 2;
+                    const cellCenterY = rect.top + rect.height / 2;
+                    
+                    // Calculate distance from cursor to cell center
+                    const distX = e.clientX - cellCenterX;
+                    const distY = e.clientY - cellCenterY;
+                    const distance = Math.sqrt(distX * distX + distY * distY);
+                    
+                    // Calculate shadow intensity based on distance
+                    const maxDistance = 300;
+                    const intensity = Math.max(0, 1 - distance / maxDistance);
+                    
+                    // Calculate shadow offset based on cursor position
+                    const maxOffset = 15;
+                    const shadowX = -(distX / distance) * maxOffset * intensity;
+                    const shadowY = -(distY / distance) * maxOffset * intensity;
+                    
+                    // Apply dynamic shadow
+                    cell.style.transform = `translate(${shadowX * 0.1}px, ${shadowY * 0.1}px)`;
+                    cell.style.boxShadow = `
+                        ${shadowX}px ${shadowY}px 20px rgba(0, 0, 0, 0.2),
+                        ${shadowX * 0.5}px ${shadowY * 0.5}px 5px rgba(0, 0, 0, 0.1),
+                        inset ${-shadowX * 0.2}px ${-shadowY * 0.2}px 5px rgba(255, 255, 255, 0.1)
+                    `;
+                });
+            });
+        }
+
+        function addMusicToggle() {
+            const titleBarButtons = document.querySelector('.title-bar-buttons');
+            const fadeDuration = 1000;
+            
+            // Create music toggle button
+            const musicButton = document.createElement('div');
+            musicButton.className = 'title-button music-button';
+            musicButton.innerHTML = '🔊';
+            musicButton.style.background = 'linear-gradient(to bottom, #4CAF50, #45a049)';
+            musicButton.style.marginRight = '8px';
+            
+            let isMuted = false;
+            let previousVolumes = new Map(); // Store previous volumes for unmuting
+            
+            musicButton.onclick = (e) => {
+                e.stopPropagation();
+                isMuted = !isMuted;
+                musicButton.innerHTML = isMuted ? '🔇' : '🔊';
+                musicButton.style.background = isMuted ? 
+                    'linear-gradient(to bottom, #ff5c5c, #e33e3e)' : 
+                    'linear-gradient(to bottom, #4CAF50, #45a049)';
+                
+                ['titleMusic', 'botMusic', 'localMusic'].forEach(id => {
+                    const audio = document.getElementById(id);
+                    if (audio) {
+                        if (isMuted) {
+                            previousVolumes.set(id, audio.volume);
+                            fadeAudio(audio, 0, fadeDuration);
+                        } else {
+                            const previousVolume = previousVolumes.get(id) ?? 0.5;
+                            fadeAudio(audio, previousVolume, fadeDuration);
+                        }
+                    }
+                });
+            };
+            
+            // Create close button
+            const closeButton = document.createElement('div');
+            closeButton.className = 'title-button';
+            closeButton.textContent = '✕';
+            closeButton.onclick = () => openMenu(menu);
+            
+            // Clear and append buttons in correct order
+            titleBarButtons.innerHTML = '';
+            titleBarButtons.appendChild(musicButton);
+            titleBarButtons.appendChild(closeButton);
         }
     </script>
 </body>
