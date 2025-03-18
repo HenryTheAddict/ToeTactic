@@ -171,10 +171,12 @@
 
         .window {
             background: var(--vista-window);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
+            border: 1px solid var(--vista-border);
+            color: var(--vista-text);
             border-radius: 8px;
             box-shadow: var(--vista-shadow);
-            border: 1px solid var(--vista-border);
             padding: 3px;
             position: relative;
             width: 100%;
@@ -225,8 +227,9 @@
         }
 
         .cell {
-            background: var(--cell-bg);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: var(--vista-window);
+            border: 1px solid var(--vista-border);
+            color: inherit;
             border-radius: 6px;
             display: flex;
             justify-content: center;
@@ -390,7 +393,9 @@
         }
 
         .settings-box {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--vista-window);
+            border: 1px solid var(--vista-border);
+            color: inherit;
             border-radius: 8px;
             padding: 15px;
             width: 90%;
@@ -852,6 +857,77 @@
             border-radius: 3px;
         }
 
+        /* Theme Variables - Update the root variables */
+        :root {
+            /* Default Vista Theme */
+            --vista-bg: linear-gradient(135deg, #0a246a, #3b5998);
+            --window-bg: rgba(255, 255, 255, 0.85);
+            --window-border: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Windows 98 Theme */
+        :root[data-theme="win98"] {
+            --win98-bg: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23008080' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"), #008080;
+            --win98-window: #c0c0c0;
+            --win98-text: #000000;
+        }
+
+        /* Mac OS Aqua Theme */
+        :root[data-theme="aqua"] {
+            --aqua-bg: linear-gradient(135deg, #B4D8FF, #77B3F3);
+            --aqua-window: rgba(255, 255, 255, 0.95);
+            --aqua-text: #000000;
+        }
+
+        /* Dark mode theme overrides */
+        .dark-mode[data-theme="win98"] {
+            --win98-bg: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"), #000000;
+            --win98-window: #404040;
+            --win98-text: #ffffff;
+        }
+
+        /* Update body background based on theme */
+        body {
+            background: var(--vista-bg);
+        }
+
+        [data-theme="win98"] body {
+            background: var(--win98-bg);
+            background-attachment: fixed;
+        }
+
+        [data-theme="aqua"] body {
+            background: var(--aqua-bg);
+        }
+
+        /* Update Windows 98 text colors for dark mode */
+        .dark-mode[data-theme="win98"] .window,
+        .dark-mode[data-theme="win98"] .button,
+        .dark-mode[data-theme="win98"] .cell,
+        .dark-mode[data-theme="win98"] .player-card,
+        .dark-mode[data-theme="win98"] .settings-box,
+        .dark-mode[data-theme="win98"] .menu,
+        .dark-mode[data-theme="win98"] .settings,
+        .dark-mode[data-theme="win98"] label,
+        .dark-mode[data-theme="win98"] p,
+        .dark-mode[data-theme="win98"] .turn-indicator,
+        .dark-mode[data-theme="win98"] .player-order,
+        .dark-mode[data-theme="win98"] .menu .button {
+            color: #ffffff !important;
+            background-color: #404040;
+        }
+
+        /* Update Windows 98 button hover states in dark mode */
+        .dark-mode[data-theme="win98"] .button:hover {
+            background: #505050;
+            color: #ffffff !important;
+        }
+
+        .dark-mode[data-theme="win98"] .button:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            color: #ffffff !important;
+        }
+
         /* Theme Variables */
         :root {
             /* Default Vista Theme */
@@ -865,6 +941,9 @@
 
         /* Windows 98 Theme */
         :root[data-theme="win98"] {
+            --win98-bg: #008080;
+            --win98-window: #c0c0c0;
+            --win98-text: #000000;
             --window-bg: #c0c0c0;
             --window-border: #808080;
             --button-gradient: #c0c0c0;
@@ -875,6 +954,10 @@
 
         /* Mac OS Aqua Theme */
         :root[data-theme="aqua"] {
+            --aqua-bg: linear-gradient(135deg, #B4D8FF, #77B3F3);
+            --aqua-window: rgba(255, 255, 255, 0.95);
+            --aqua-text: #000000;
+            --aqua-border: rgba(0, 156, 255, 0.5);
             --window-bg: rgba(255, 255, 255, 0.9);
             --window-border: rgba(0, 156, 255, 0.5);
             --button-gradient: linear-gradient(to bottom, #4BB3FF, #007AFF);
@@ -895,10 +978,12 @@
 
         /* Windows 98 specific styles */
         [data-theme="win98"] .window {
-            border-width: 2px;
-            border-style: solid;
+            background: var(--win98-window);
+            border: 2px solid;
             border-color: #dfdfdf #404040 #404040 #dfdfdf;
-            box-shadow: 1px 1px 0 #000000;
+            color: var(--win98-text);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
         [data-theme="win98"] .button {
@@ -925,8 +1010,10 @@
 
         /* Mac OS Aqua specific styles */
         [data-theme="aqua"] .window {
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: var(--aqua-window);
+            border: 1px solid var(--aqua-border);
+            color: var(--aqua-text);
+            border-radius: 8px;
         }
 
         [data-theme="aqua"] .button {
@@ -937,7 +1024,7 @@
         }
 
         [data-theme="aqua"] .cell {
-            border-radius: 10px;
+            border-radius: 6px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -991,18 +1078,81 @@
             border-radius: 50%;
             border: none;
             padding: 0;
+            position: relative;
+            transition: all 0.2s ease;
         }
 
         [data-theme="aqua"] .title-button.close {
             background: #ff5f57;
+            border: 1px solid #e0443e;
         }
 
         [data-theme="aqua"] .title-button.minimize {
             background: #febc2e;
+            border: 1px solid #e1a116;
         }
 
-        [data-theme="aqua"] .title-button.maximize {
-            background: #28c840;
+        [data-theme="aqua"] .title-button.music-button {
+            background: #28c940;
+            border: 1px solid #17b52c;
+        }
+
+        [data-theme="aqua"] .title-button:hover {
+            filter: brightness(1.1);
+        }
+
+        [data-theme="aqua"] .title-button:active {
+            filter: brightness(0.9);
+        }
+
+        /* Add symbols inside the buttons that show on hover */
+        [data-theme="aqua"] .title-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 8px;
+            line-height: 1;
+        }
+
+        [data-theme="aqua"] .title-button.close::before {
+            content: '×';
+        }
+
+        [data-theme="aqua"] .title-button.minimize::before {
+            content: '−';
+        }
+
+        [data-theme="aqua"] .title-button.music-button::before {
+            content: '♪';
+        }
+
+        [data-theme="aqua"] .title-button:hover::before {
+            opacity: 1;
+        }
+
+        /* Update dark mode text colors for Mac OS theme */
+        .dark-mode[data-theme="aqua"] {
+            --aqua-bg: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            --aqua-window: rgba(40, 40, 40, 0.95);
+            --aqua-text: #ffffff;
+            --aqua-border: rgba(80, 80, 80, 0.5);
+        }
+
+        .dark-mode[data-theme="aqua"] .window,
+        .dark-mode[data-theme="aqua"] .button,
+        .dark-mode[data-theme="aqua"] .cell,
+        .dark-mode[data-theme="aqua"] .player-card,
+        .dark-mode[data-theme="aqua"] .settings-box,
+        .dark-mode[data-theme="aqua"] .menu,
+        .dark-mode[data-theme="aqua"] .settings,
+        .dark-mode[data-theme="aqua"] label,
+        .dark-mode[data-theme="aqua"] p {
+            color: var(--aqua-text);
         }
 
         /* Add these styles */
@@ -1091,6 +1241,204 @@
 
         .volume-value {
             min-width: 45px;
+        }
+
+        /* Add styles for board thinking state */
+        .board.thinking {
+            pointer-events: none;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Update Mac OS Aqua theme styles */
+        [data-theme="aqua"] {
+            --aqua-text: #000000;
+            --aqua-title-text: #000000;
+            --aqua-window-bg: rgba(255, 255, 255, 0.95);
+            --aqua-border: rgba(0, 156, 255, 0.5);
+            --aqua-button-gradient: linear-gradient(to bottom, #FEFEFE, #F1F1F1);
+            --aqua-button-border: #ACACAC;
+            --aqua-button-text: #000000;
+        }
+
+        [data-theme="aqua"] .title-bar {
+            background: linear-gradient(to bottom, #FFFFFF, #E2E2E2);
+            color: var(--aqua-text);
+            border-bottom: 1px solid #ACACAC;
+        }
+
+        [data-theme="aqua"] .button {
+            background: var(--aqua-button-gradient);
+            color: var(--aqua-button-text);
+            border: 1px solid var(--aqua-button-border);
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme-specific modal styles */
+        .modal {
+            background: var(--window-bg);
+            border: var(--window-border);
+            color: #000000 !important; /* Force black text */
+        }
+
+        .modal-content {
+            color: #000000 !important; /* Force black text */
+        }
+
+        .modal-header {
+            color: #000000 !important; /* Force black text */
+        }
+
+        /* Theme-specific modal styles */
+        [data-theme="win98"] .modal {
+            background: #C0C0C0;
+            border: 2px solid;
+            border-color: #DFDFDF #404040 #404040 #DFDFDF;
+            box-shadow: 1px 1px 0 #000000;
+            border-radius: 0;
+        }
+
+        [data-theme="win98"] .modal-header {
+            background: #000080;
+            color: #FFFFFF !important; /* Keep white text for Win98 header only */
+            padding: 2px 3px;
+        }
+
+        [data-theme="aqua"] .modal {
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="aqua"] .modal-header {
+            background: linear-gradient(to bottom, #FFFFFF, #E2E2E2);
+            border-bottom: 1px solid #ACACAC;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* Update modal button styles to ensure visibility */
+        .modal-button {
+            background: #FFFFFF;
+            color: #000000 !important;
+            border: 1px solid #ACACAC;
+        }
+
+        .modal-button.primary {
+            background: linear-gradient(to bottom, #2671be, #1e4c9c);
+            color: #FFFFFF !important;
+            border-color: #2671be;
+        }
+
+        /* Add flashing effect for thinking state */
+        @keyframes boardThinking {
+            0% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.7; }
+        }
+
+        .board.thinking {
+            pointer-events: none;
+            cursor: not-allowed;
+            animation: boardThinking 1s infinite;
+            position: relative;
+        }
+
+        .board.thinking::after {
+            content: '🤖 Thinking...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10;
+        }
+
+        /* Update Mac OS Aqua theme styles with dark mode support */
+        [data-theme="aqua"] {
+            --aqua-text: #000000;
+            --aqua-title-text: #000000;
+            --aqua-window-bg: rgba(255, 255, 255, 0.95);
+            --aqua-border: rgba(0, 156, 255, 0.5);
+            --aqua-button-gradient: linear-gradient(to bottom, #FEFEFE, #F1F1F1);
+            --aqua-button-border: #ACACAC;
+            --aqua-button-text: #000000;
+        }
+
+        /* Dark mode overrides for Mac OS Aqua */
+        .dark-mode[data-theme="aqua"] {
+            --aqua-text: #FFFFFF;
+            --aqua-window-bg: rgba(50, 50, 50, 0.95);
+            --aqua-button-gradient: linear-gradient(to bottom, #3A3A3A, #2A2A2A);
+            --aqua-button-text: #FFFFFF;
+        }
+
+        /* Menu and button text colors */
+        [data-theme="aqua"] .button,
+        [data-theme="aqua"] .menu,
+        [data-theme="aqua"] .settings,
+        [data-theme="aqua"] .player-card,
+        [data-theme="aqua"] .turn-indicator {
+            color: var(--aqua-text);
+        }
+
+        /* Always keep modal text black regardless of dark mode */
+        [data-theme="aqua"] .modal,
+        [data-theme="aqua"] .modal-content,
+        [data-theme="aqua"] .modal-header {
+            color: #000000 !important;
+            background: #FFFFFF;
+        }
+
+        [data-theme="aqua"] .modal-button {
+            background: var(--aqua-button-gradient);
+            color: var(--aqua-button-text);
+            border: 1px solid var(--aqua-button-border);
+        }
+
+        [data-theme="aqua"] .modal-button.primary {
+            background: linear-gradient(to bottom, #2671be, #1e4c9c);
+            color: #FFFFFF !important;
+            border-color: #2671be;
+        }
+
+        /* Settings text colors */
+        [data-theme="aqua"] .settings-box {
+            color: var(--aqua-text);
+        }
+
+        [data-theme="aqua"] label,
+        [data-theme="aqua"] p {
+            color: var(--aqua-text);
+        }
+
+        /* Update Mac OS Aqua theme styles */
+        [data-theme="aqua"] .title-bar {
+            background: linear-gradient(to bottom, #FFFFFF, #E2E2E2);
+            color: #000000 !important; /* Force black text */
+            border-bottom: 1px solid #ACACAC;
+        }
+
+        /* Dark mode overrides for Mac OS Aqua */
+        .dark-mode[data-theme="aqua"] .title-bar {
+            background: linear-gradient(to bottom, #E2E2E2, #D1D1D1);
+            color: #000000 !important; /* Keep text black in dark mode */
+            border-bottom: 1px solid #ACACAC;
+        }
+
+        /* Update the window background in dark mode but keep title bar light */
+        .dark-mode[data-theme="aqua"] .window {
+            background: var(--aqua-window-bg);
+            border: 1px solid var(--aqua-border);
+        }
+
+        /* Keep the title text black in both light and dark modes */
+        [data-theme="aqua"] .title-bar span {
+            color: #000000 !important;
         }
     </style>
 </head>
@@ -1584,36 +1932,12 @@
 
         function handleClick(event) {
             const cell = event.target.closest('.cell');
-            if (!cell || cell.textContent !== '') return;
+            if (!cell || cell.querySelector('.cell-content').textContent !== '') return;
             
-            const row = parseInt(cell.dataset.row);
-            const col = parseInt(cell.dataset.col);
-            const content = cell.querySelector('.cell-content');
+            // Prevent clicking during bot's turn
+            if (playWithBotMode && currentPlayerIndex === 1) return;
             
-            content.textContent = players[currentPlayerIndex];
-            cell.classList.add('placed');
-            
-            if (checkLose(row, col)) {
-                setTimeout(() => {
-                    showGameModal(
-                        'Game Over',
-                        `Player ${players[(currentPlayerIndex + 1) % players.length]} wins! ${players[currentPlayerIndex]} loses!`
-                    );
-                    showLosingStreak(row, col);
-                    startContinuousConfetti();
-                }, 100);
-            } else if (isBoardFull()) {
-                setTimeout(() => {
-                    showGameModal('Game Over', "It's a draw!");
-                }, 100);
-            } else {
-                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-                updateTurnIndicator();
-                updatePlayerQueue();
-                if (playWithBotMode && currentPlayerIndex === 1) {
-                    setTimeout(botMove, 500);
-                }
-            }
+            makeMove(cell);
         }
 
         function isBoardFull() {
@@ -1706,41 +2030,61 @@
             updatePlayerQueue();
         }
 
+        // Update the botMove function to properly handle bot moves
         function botMove() {
-            if (aiDifficulty.value === 'impossible') {
-                botMoveImpossible();
-                return;
-            }
+            if (!playWithBotMode || currentPlayerIndex !== 1) return;
+            
+            const board = document.getElementById('board');
+            board.classList.add('thinking');
+            
+            // Add a timeout to ensure bot makes a move or forfeits
+            const timeoutDuration = 20000; // 20 seconds
+            const botMoveTimeout = setTimeout(() => {
+                board.classList.remove('thinking');
+                showGameModal('Bot Forfeit', 'The bot took too long to respond and forfeited the game!');
+            }, timeoutDuration);
 
-            const difficulty = aiDifficulty.value;
-            let cell;
+            // Bot move logic
+            setTimeout(() => {
+                clearTimeout(botMoveTimeout);
+                let cell;
+                
+                if (aiDifficulty.value === 'impossible') {
+                    cell = findBestMoveImpossible();
+                } else {
+                    switch (aiDifficulty.value) {
+                        case 'hard':
+                            cell = Math.random() < 0.8 ? findBestMove() : makeRandomMove();
+                            break;
+                        case 'medium':
+                            cell = Math.random() < 0.5 ? findBestMove() : makeRandomMove();
+                            break;
+                        case 'easy':
+                        default:
+                            cell = Math.random() < 0.2 ? findBestMove() : makeRandomMove();
+                            break;
+                    }
+                }
 
-            switch (difficulty) {
-                case 'hard':
-                    // 80% chance of making the best move
-                    cell = Math.random() < 0.8 ? findBestMove() : makeRandomMove();
-                    break;
-                case 'medium':
-                    // 50% chance of making the best move
-                    cell = Math.random() < 0.5 ? findBestMove() : makeRandomMove();
-                    break;
-                case 'easy':
-                default:
-                    // 20% chance of making the best move
-                    cell = Math.random() < 0.2 ? findBestMove() : makeRandomMove();
-                    break;
-            }
-
-            if (cell) {
-                setTimeout(() => makeMove(cell), 500);
-            }
+                if (cell) {
+                    cell.classList.add('bot-move');
+                    makeMove(cell);
+                }
+                board.classList.remove('thinking');
+            }, 1000); // Give bot 1 second to "think"
         }
 
+        // Update the makeMove function
         function makeMove(cell) {
-            if (!cell) return;
+            if (!cell || cell.querySelector('.cell-content').textContent !== '') return;
+            
+            // Check if it's bot's turn and player is trying to make a move
+            if (playWithBotMode && currentPlayerIndex === 1 && !cell.classList.contains('bot-move')) {
+                return;
+            }
             
             const content = cell.querySelector('.cell-content');
-            content.textContent = players[1];
+            content.textContent = players[currentPlayerIndex];
             cell.classList.add('placed');
             
             const row = parseInt(cell.dataset.row);
@@ -1750,22 +2094,25 @@
                 setTimeout(() => {
                     showGameModal(
                         'Game Over',
-                        `Player ${players[0]} wins! ${players[1]} loses!`
+                        `Player ${players[(currentPlayerIndex + 1) % players.length]} wins! ${players[currentPlayerIndex]} loses!`
                     );
                     showLosingStreak(row, col);
                     startContinuousConfetti();
                 }, 100);
-                return; // Add return to prevent further execution
             } else if (isBoardFull()) {
                 setTimeout(() => {
                     showGameModal('Game Over', "It's a draw!");
                 }, 100);
-                return; // Add return to prevent further execution
+            } else {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateTurnIndicator();
+                updatePlayerQueue();
+                
+                // If it's bot's turn, trigger bot move
+                if (playWithBotMode && currentPlayerIndex === 1) {
+                    setTimeout(botMove, 500);
+                }
             }
-            
-            currentPlayerIndex = 0;
-            updateTurnIndicator();
-            updatePlayerQueue();
         }
 
         function makeRandomMove() {
@@ -2245,37 +2592,61 @@
             });
         }
 
-        // Update the existing addMusicToggle function
+        // Update the addMusicToggle function for Mac OS theme
         function addMusicToggle() {
             const titleBarButtons = document.querySelector('.title-bar-buttons');
-            
-            // Create music toggle button
-            const musicButton = document.createElement('div');
-            musicButton.className = 'title-button music-button';
-            musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
-            musicButton.style.background = audioEnabled ? 
-                'linear-gradient(to bottom, #4CAF50, #45a049)' : 
-                'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
-            musicButton.style.marginRight = '8px';
-            
-            musicButton.onclick = (e) => {
-                e.stopPropagation();
-                audioEnabled = !audioEnabled;
-                document.getElementById('audioEnabled').checked = audioEnabled;
-                localStorage.setItem('audioEnabled', audioEnabled);
-                updateAudioVolumes();
-            };
-            
-            // Create close button
-            const closeButton = document.createElement('div');
-            closeButton.className = 'title-button';
-            closeButton.textContent = '✕';
-            closeButton.onclick = () => openMenu(menu);
-            
-            // Clear and append buttons in correct order
+            const theme = document.documentElement.getAttribute('data-theme');
             titleBarButtons.innerHTML = '';
-            titleBarButtons.appendChild(musicButton);
-            titleBarButtons.appendChild(closeButton);
+
+            if (theme === 'aqua') {
+                // Create Mac OS style buttons
+                const closeButton = document.createElement('div');
+                closeButton.className = 'title-button close';
+                closeButton.onclick = () => openMenu(menu);
+
+                const minimizeButton = document.createElement('div');
+                minimizeButton.className = 'title-button minimize';
+                minimizeButton.onclick = () => openMenu(menu);
+
+                const musicButton = document.createElement('div');
+                musicButton.className = 'title-button music-button';
+                musicButton.onclick = (e) => {
+                    e.stopPropagation();
+                    audioEnabled = !audioEnabled;
+                    document.getElementById('audioEnabled').checked = audioEnabled;
+                    localStorage.setItem('audioEnabled', audioEnabled);
+                    updateAudioVolumes();
+                };
+
+                titleBarButtons.appendChild(closeButton);
+                titleBarButtons.appendChild(minimizeButton);
+                titleBarButtons.appendChild(musicButton);
+            } else {
+                // Original style buttons for other themes
+                const musicButton = document.createElement('div');
+                musicButton.className = 'title-button music-button';
+                musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
+                musicButton.style.background = audioEnabled ? 
+                    'linear-gradient(to bottom, #4CAF50, #45a049)' : 
+                    'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
+                musicButton.style.marginRight = '8px';
+                
+                musicButton.onclick = (e) => {
+                    e.stopPropagation();
+                    audioEnabled = !audioEnabled;
+                    document.getElementById('audioEnabled').checked = audioEnabled;
+                    localStorage.setItem('audioEnabled', audioEnabled);
+                    updateAudioVolumes();
+                };
+                
+                const closeButton = document.createElement('div');
+                closeButton.className = 'title-button';
+                closeButton.textContent = '✕';
+                closeButton.onclick = () => openMenu(menu);
+                
+                titleBarButtons.appendChild(musicButton);
+                titleBarButtons.appendChild(closeButton);
+            }
         }
 
         // Add this function to update all audio volumes
