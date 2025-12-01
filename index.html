@@ -778,12 +778,12 @@
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
+            width: 20px;
+            height: 20px;
             pointer-events: none;
             z-index: 1000;
             opacity: 0;
-            top: -20px;
+            top: -30px;
         }
 
         .confetti.circle {
@@ -800,16 +800,22 @@
 
         .confetti.star {
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            width: 25px;
+            height: 25px;
         }
 
         @keyframes confettiFall {
             0% {
-                transform: translateY(0) rotate(0deg) scale(0);
+                transform: translateY(0) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            20% {
+                transform: translateY(20vh) rotate(144deg) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translateY(120vh) rotate(720deg) scale(0.5);
-                opacity: 0;
+                transform: translateY(120vh) rotate(720deg) scale(0.8);
+                opacity: 0.3;
             }
         }
 
@@ -1584,6 +1590,25 @@
             --vista-text: #E6E1E5;
         }
 
+        .dark-mode[data-theme="material"] .window,
+        .dark-mode[data-theme="material"] .cell,
+        .dark-mode[data-theme="material"] .player-card,
+        .dark-mode[data-theme="material"] .turn-indicator,
+        .dark-mode[data-theme="material"] .settings-box,
+        .dark-mode[data-theme="material"] .menu,
+        .dark-mode[data-theme="material"] .settings,
+        .dark-mode[data-theme="material"] label,
+        .dark-mode[data-theme="material"] p {
+            background: var(--material-surface);
+            color: var(--material-on-surface) !important;
+            border-color: var(--material-surface-variant);
+        }
+
+        .dark-mode[data-theme="material"] .player-card.active {
+            background: var(--material-surface-variant);
+            border-color: var(--material-primary);
+        }
+
         .dark-mode[data-theme="material"] .button {
             background: var(--material-primary);
             color: var(--material-on-primary);
@@ -1591,6 +1616,30 @@
 
         .dark-mode[data-theme="material"] .button:hover {
             background: #E8DDFF;
+        }
+
+        .dark-mode[data-theme="material"] .modal {
+            background: var(--material-surface);
+        }
+
+        .dark-mode[data-theme="material"] .modal-content {
+            color: var(--material-on-surface) !important;
+        }
+
+        .dark-mode[data-theme="material"] .modal-buttons {
+            background: var(--material-surface-variant);
+        }
+
+        .dark-mode[data-theme="material"] .modal-button {
+            background: var(--material-surface);
+            color: var(--material-on-surface) !important;
+        }
+
+        .dark-mode[data-theme="material"] select,
+        .dark-mode[data-theme="material"] input {
+            background: var(--material-surface-variant);
+            color: var(--material-on-surface) !important;
+            border-color: var(--material-outline);
         }
 
         /* ========== NORD THEME ========== */
@@ -1675,19 +1724,43 @@
             --vista-text: #ECEFF4;
         }
 
+        .dark-mode[data-theme="nord"] .window,
         .dark-mode[data-theme="nord"] .cell,
         .dark-mode[data-theme="nord"] .player-card,
         .dark-mode[data-theme="nord"] .turn-indicator,
-        .dark-mode[data-theme="nord"] .settings-box {
+        .dark-mode[data-theme="nord"] .settings-box,
+        .dark-mode[data-theme="nord"] .menu,
+        .dark-mode[data-theme="nord"] .settings,
+        .dark-mode[data-theme="nord"] label,
+        .dark-mode[data-theme="nord"] p {
             background: #3B4252;
             border-color: #4C566A;
-            color: #ECEFF4;
+            color: #ECEFF4 !important;
+        }
+
+        .dark-mode[data-theme="nord"] .player-card.active {
+            background: #434C5E;
+            border-color: var(--nord-frost);
         }
 
         .dark-mode[data-theme="nord"] .modal,
-        .dark-mode[data-theme="nord"] .modal-content {
+        .dark-mode[data-theme="nord"] .modal-content,
+        .dark-mode[data-theme="nord"] .modal-buttons {
             background: #3B4252;
-            color: #ECEFF4;
+            color: #ECEFF4 !important;
+        }
+
+        .dark-mode[data-theme="nord"] .modal-button {
+            background: #434C5E;
+            color: #ECEFF4 !important;
+            border-color: #4C566A;
+        }
+
+        .dark-mode[data-theme="nord"] select,
+        .dark-mode[data-theme="nord"] input {
+            background: #434C5E;
+            color: #ECEFF4 !important;
+            border-color: #4C566A;
         }
 
         /* ========== CATPPUCCIN THEME (Latte) ========== */
@@ -1778,19 +1851,43 @@
             --vista-text: #cdd6f4;
         }
 
+        .dark-mode[data-theme="catppuccin"] .window,
         .dark-mode[data-theme="catppuccin"] .cell,
         .dark-mode[data-theme="catppuccin"] .player-card,
         .dark-mode[data-theme="catppuccin"] .turn-indicator,
-        .dark-mode[data-theme="catppuccin"] .settings-box {
+        .dark-mode[data-theme="catppuccin"] .settings-box,
+        .dark-mode[data-theme="catppuccin"] .menu,
+        .dark-mode[data-theme="catppuccin"] .settings,
+        .dark-mode[data-theme="catppuccin"] label,
+        .dark-mode[data-theme="catppuccin"] p {
             background: #1e1e2e;
             border-color: #313244;
-            color: #cdd6f4;
+            color: #cdd6f4 !important;
+        }
+
+        .dark-mode[data-theme="catppuccin"] .player-card.active {
+            background: #313244;
+            border-color: var(--ctp-mauve);
         }
 
         .dark-mode[data-theme="catppuccin"] .modal,
-        .dark-mode[data-theme="catppuccin"] .modal-content {
+        .dark-mode[data-theme="catppuccin"] .modal-content,
+        .dark-mode[data-theme="catppuccin"] .modal-buttons {
             background: #1e1e2e;
-            color: #cdd6f4;
+            color: #cdd6f4 !important;
+        }
+
+        .dark-mode[data-theme="catppuccin"] .modal-button {
+            background: #313244;
+            color: #cdd6f4 !important;
+            border-color: #45475a;
+        }
+
+        .dark-mode[data-theme="catppuccin"] select,
+        .dark-mode[data-theme="catppuccin"] input {
+            background: #313244;
+            color: #cdd6f4 !important;
+            border-color: #45475a;
         }
 
         /* ========== DRACULA THEME ========== */
@@ -1976,19 +2073,43 @@
             --vista-text: #839496;
         }
 
+        .dark-mode[data-theme="solarized"] .window,
         .dark-mode[data-theme="solarized"] .cell,
         .dark-mode[data-theme="solarized"] .player-card,
         .dark-mode[data-theme="solarized"] .turn-indicator,
-        .dark-mode[data-theme="solarized"] .settings-box {
+        .dark-mode[data-theme="solarized"] .settings-box,
+        .dark-mode[data-theme="solarized"] .menu,
+        .dark-mode[data-theme="solarized"] .settings,
+        .dark-mode[data-theme="solarized"] label,
+        .dark-mode[data-theme="solarized"] p {
             background: #002b36;
             border-color: #073642;
-            color: #93a1a1;
+            color: #93a1a1 !important;
+        }
+
+        .dark-mode[data-theme="solarized"] .player-card.active {
+            background: #073642;
+            border-color: var(--sol-blue);
         }
 
         .dark-mode[data-theme="solarized"] .modal,
-        .dark-mode[data-theme="solarized"] .modal-content {
+        .dark-mode[data-theme="solarized"] .modal-content,
+        .dark-mode[data-theme="solarized"] .modal-buttons {
             background: #002b36;
-            color: #93a1a1;
+            color: #93a1a1 !important;
+        }
+
+        .dark-mode[data-theme="solarized"] .modal-button {
+            background: #073642;
+            color: #93a1a1 !important;
+            border-color: #586e75;
+        }
+
+        .dark-mode[data-theme="solarized"] select,
+        .dark-mode[data-theme="solarized"] input {
+            background: #073642;
+            color: #93a1a1 !important;
+            border-color: #586e75;
         }
 
         /* ========== SHARED THEME UTILITIES ========== */
@@ -2732,15 +2853,113 @@
             return emptyCells.length > 0 ? emptyCells[Math.floor(Math.random() * emptyCells.length)] : null;
         }
 
-        function findBestMove() {
-            let bestScore = -Infinity;
-            let bestMove = null;
-
+        // Calculate optimal search depth based on grid size and empty cells
+        function calculateSearchDepth(difficulty) {
+            const emptyCells = countEmptyCells();
+            const totalCells = gridSize * gridSize;
+            
+            // Base depth calculations - mathematical scaling
+            let baseDepth;
+            switch(difficulty) {
+                case 'easy':
+                    baseDepth = 1;
+                    break;
+                case 'medium':
+                    baseDepth = Math.min(3, Math.floor(Math.log2(gridSize) + 1));
+                    break;
+                case 'hard':
+                    baseDepth = Math.min(5, Math.floor(Math.log2(gridSize) * 2));
+                    break;
+                case 'impossible':
+                    // For impossible: deeper search, but scale with grid size
+                    baseDepth = Math.min(8, Math.floor(10 - Math.log2(gridSize)));
+                    break;
+                default:
+                    baseDepth = 3;
+            }
+            
+            // Increase depth as game progresses (fewer empty cells = can search deeper)
+            const progressBonus = Math.floor((totalCells - emptyCells) / (totalCells / 3));
+            
+            return Math.max(1, baseDepth + progressBonus);
+        }
+        
+        function countEmptyCells() {
+            let count = 0;
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
                     if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        // Evaluate position heuristically for larger grids
+        function evaluatePosition(row, col, symbol) {
+            let score = 0;
+            const opponent = symbol === players[0] ? players[1] : players[0];
+            
+            // Check all directions for potential threats
+            const directions = [
+                [0, 1],   // horizontal
+                [1, 0],   // vertical
+                [1, 1],   // diagonal
+                [1, -1]   // anti-diagonal
+            ];
+            
+            for (const [dr, dc] of directions) {
+                let myCount = 0;
+                let opponentCount = 0;
+                let emptyCount = 0;
+                
+                // Check 3 cells in each direction (for winning line detection)
+                for (let offset = -2; offset <= 2; offset++) {
+                    const r = row + offset * dr;
+                    const c = col + offset * dc;
+                    
+                    if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
+                        const content = cells[r][c].querySelector('.cell-content').textContent;
+                        if (content === symbol) myCount++;
+                        else if (content === opponent) opponentCount++;
+                        else emptyCount++;
+                    }
+                }
+                
+                // Scoring: avoid creating lines of 3 (losing), force opponent to create lines
+                // Higher score = better for bot (avoid losing)
+                if (myCount >= 2 && emptyCount >= 1) {
+                    score -= 50; // Danger: might create 3 in a row (lose)
+                }
+                if (opponentCount >= 2 && emptyCount >= 1) {
+                    score += 30; // Good: opponent might be forced to create 3
+                }
+            }
+            
+            // Center control bonus for larger grids
+            const centerDist = Math.abs(row - gridSize/2) + Math.abs(col - gridSize/2);
+            score += Math.floor((gridSize - centerDist) * 2);
+            
+            return score;
+        }
+
+        function findBestMove() {
+            let bestScore = -Infinity;
+            let bestMove = null;
+            const depth = calculateSearchDepth(aiDifficulty.value);
+
+            // First, check for immediate threats (2 in a row situations)
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        // Evaluate position heuristically first
+                        const posScore = evaluatePosition(i, j, players[1]);
+                        
                         cells[i][j].querySelector('.cell-content').textContent = players[1];
-                        let score = minimax(cells, 0, false, -Infinity, Infinity, 3);
+                        let score = minimax(cells, 0, false, -Infinity, Infinity, depth);
+                        // Add position-based heuristic
+                        score += posScore * 0.1;
                         cells[i][j].querySelector('.cell-content').textContent = '';
                         
                         if (score > bestScore) {
@@ -2766,27 +2985,33 @@
             let bestMove = null;
             const terminal = document.getElementById('calculationTerminal');
             terminal.innerHTML = '';
-            addTerminalLine('🤖 Calculating optimal move...');
+            
+            const depth = calculateSearchDepth('impossible');
+            addTerminalLine(`🤖 Calculating optimal move (depth: ${depth}, grid: ${gridSize}x${gridSize})...`);
 
+            // Use iterative deepening for larger grids
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
                     if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        const posScore = evaluatePosition(i, j, players[1]);
+                        
                         cells[i][j].querySelector('.cell-content').textContent = players[1];
-                        let score = minimax(cells, 0, false, -Infinity, Infinity, 6);
+                        let score = minimax(cells, 0, false, -Infinity, Infinity, depth);
+                        score += posScore * 0.1;
                         cells[i][j].querySelector('.cell-content').textContent = '';
                         
-                        addTerminalLine(`Evaluating position (${i},${j}): Score = ${score}`);
+                        addTerminalLine(`Position (${i},${j}): minimax=${score.toFixed(1)}, heuristic=${posScore}`);
                         
                         if (score > bestScore) {
                             bestScore = score;
                             bestMove = cells[i][j];
-                            addTerminalLine(`✨ New best move found at (${i},${j}) with score ${score}`);
+                            addTerminalLine(`✨ New best move at (${i},${j}) with score ${score.toFixed(1)}`);
                         }
                     }
                 }
             }
 
-            addTerminalLine(`🎯 Selected move with score: ${bestScore}`);
+            addTerminalLine(`🎯 Selected move with final score: ${bestScore.toFixed(1)}`);
             return bestMove;
         }
 
@@ -2805,23 +3030,26 @@
         }
 
         function minimax(board, depth, isMaximizing, alpha, beta, maxDepth) {
-            if (depth === 0) {
-                addTerminalLine(`↳ Depth ${depth}: Starting evaluation...`);
-            }
-
             // Check for win/lose conditions without visual updates
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
                     if (cells[i][j].querySelector('.cell-content').textContent !== '' && 
                         checkLose(i, j, false)) {
-                        return cells[i][j].querySelector('.cell-content').textContent === players[1] ? -100 : 100;
+                        const loser = cells[i][j].querySelector('.cell-content').textContent;
+                        // Return score adjusted by depth (prefer winning sooner, losing later)
+                        return loser === players[1] ? (-100 + depth) : (100 - depth);
                     }
                 }
             }
 
-            const result = checkGameState();
-            if (result !== null) {
-                return result;
+            // Check for draw
+            if (isBoardFull()) {
+                return 0;
+            }
+            
+            // Depth limit reached - use heuristic evaluation for larger grids
+            if (depth >= maxDepth) {
+                return evaluateBoardHeuristic();
             }
 
             if (isMaximizing) {
@@ -2834,9 +3062,10 @@
                             cells[i][j].querySelector('.cell-content').textContent = '';
                             maxScore = Math.max(score, maxScore);
                             alpha = Math.max(alpha, score);
-                            if (beta <= alpha) break;
+                            if (beta <= alpha) break; // Alpha-beta pruning
                         }
                     }
+                    if (beta <= alpha) break;
                 }
                 return maxScore;
             } else {
@@ -2849,12 +3078,59 @@
                             cells[i][j].querySelector('.cell-content').textContent = '';
                             minScore = Math.min(score, minScore);
                             beta = Math.min(beta, score);
-                            if (beta <= alpha) break;
+                            if (beta <= alpha) break; // Alpha-beta pruning
                         }
                     }
+                    if (beta <= alpha) break;
                 }
                 return minScore;
             }
+        }
+        
+        // Heuristic evaluation for larger grids when depth limit is reached
+        function evaluateBoardHeuristic() {
+            let score = 0;
+            
+            // Evaluate all possible lines of 3
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const content = cells[i][j].querySelector('.cell-content').textContent;
+                    if (content !== '') {
+                        // Check each direction for partial lines
+                        const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+                        
+                        for (const [dr, dc] of directions) {
+                            let botCount = 0;
+                            let playerCount = 0;
+                            let emptyCount = 0;
+                            
+                            for (let k = 0; k < 3; k++) {
+                                const r = i + k * dr;
+                                const c = j + k * dc;
+                                
+                                if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
+                                    const cellContent = cells[r][c].querySelector('.cell-content').textContent;
+                                    if (cellContent === players[1]) botCount++;
+                                    else if (cellContent === players[0]) playerCount++;
+                                    else emptyCount++;
+                                }
+                            }
+                            
+                            // Bot should AVOID making 3 in a row (it's a LOSE condition in this game)
+                            // So penalize positions where bot has 2 in a row
+                            if (botCount === 2 && emptyCount === 1 && playerCount === 0) {
+                                score -= 20; // Bad for bot
+                            }
+                            // Reward forcing player into making 3 in a row
+                            if (playerCount === 2 && emptyCount === 1 && botCount === 0) {
+                                score += 15; // Good for bot
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return score;
         }
 
         function evaluateBoard(board) {
@@ -2954,7 +3230,7 @@
                 '#FFD93D', '#FF8C42', '#4CAF50', '#E74C3C'
             ];
             
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 12; i++) {
                 const confetti = document.createElement('div');
                 const shape = shapes[Math.floor(Math.random() * shapes.length)];
                 const color = colors[Math.floor(Math.random() * colors.length)];
@@ -2962,8 +3238,10 @@
                 confetti.className = `confetti ${shape}`;
                 confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.background = color;
-                confetti.style.transform = `scale(${0.8 + Math.random() * 0.5})`;
-                confetti.style.animation = `confettiFall ${1.5 + Math.random()}s linear forwards`;
+                // Larger scale: 1.2 to 2.0
+                confetti.style.transform = `scale(${1.2 + Math.random() * 0.8})`;
+                // Slower animation: 4 to 7 seconds (was 1.5 to 2.5)
+                confetti.style.animation = `confettiFall ${4 + Math.random() * 3}s ease-out forwards`;
                 
                 confettiContainer.appendChild(confetti);
                 
