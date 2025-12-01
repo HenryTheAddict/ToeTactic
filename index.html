@@ -1440,6 +1440,606 @@
         [data-theme="aqua"] .title-bar span {
             color: #000000 !important;
         }
+
+        /* ========== MATERIAL YOU THEME ========== */
+        :root[data-theme="material"] {
+            --material-primary: #6750A4;
+            --material-on-primary: #FFFFFF;
+            --material-surface: #FFFBFE;
+            --material-on-surface: #1C1B1F;
+            --material-surface-variant: #E7E0EC;
+            --material-outline: #79747E;
+            --material-secondary: #625B71;
+            --material-tertiary: #7D5260;
+            --vista-bg: linear-gradient(135deg, #D0BCFF 0%, #EADDFF 50%, #F6EDFF 100%);
+            --vista-text: #1C1B1F;
+        }
+
+        [data-theme="material"] body {
+            font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        [data-theme="material"] .window {
+            background: var(--material-surface);
+            border: none;
+            border-radius: 28px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="material"] .title-bar {
+            background: var(--material-primary);
+            color: var(--material-on-primary);
+            border-radius: 28px 28px 0 0;
+            padding: 16px 24px;
+            font-weight: 500;
+        }
+
+        [data-theme="material"] .button {
+            background: var(--material-primary);
+            color: var(--material-on-primary);
+            border: none;
+            border-radius: 100px;
+            padding: 12px 24px;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="material"] .button:hover {
+            background: #7965AF;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            transform: translateY(-1px);
+        }
+
+        [data-theme="material"] .cell {
+            background: var(--material-surface);
+            border: 2px solid var(--material-surface-variant);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        [data-theme="material"] .cell:hover {
+            background: var(--material-surface-variant);
+            border-color: var(--material-primary);
+        }
+
+        [data-theme="material"] .player-card {
+            background: var(--material-surface);
+            border: 2px solid var(--material-surface-variant);
+            border-radius: 16px;
+            color: var(--material-on-surface);
+        }
+
+        [data-theme="material"] .player-card.active {
+            background: #EADDFF;
+            border-color: var(--material-primary);
+        }
+
+        [data-theme="material"] .turn-indicator {
+            background: var(--material-surface);
+            border: 2px solid var(--material-surface-variant);
+            border-radius: 100px;
+            color: var(--material-on-surface);
+        }
+
+        [data-theme="material"] .settings-box {
+            background: var(--material-surface);
+            border: 2px solid var(--material-surface-variant);
+            border-radius: 16px;
+            color: var(--material-on-surface);
+        }
+
+        [data-theme="material"] .modal {
+            background: var(--material-surface);
+            border-radius: 28px;
+            border: none;
+        }
+
+        [data-theme="material"] .modal-header {
+            background: var(--material-primary);
+            color: var(--material-on-primary);
+            border-radius: 28px 28px 0 0;
+        }
+
+        [data-theme="material"] .modal-content {
+            color: var(--material-on-surface);
+        }
+
+        [data-theme="material"] .modal-buttons {
+            background: var(--material-surface);
+            border: none;
+            border-radius: 0 0 28px 28px;
+        }
+
+        [data-theme="material"] .modal-button {
+            background: var(--material-surface-variant);
+            color: var(--material-on-surface);
+            border: none;
+            border-radius: 100px;
+        }
+
+        [data-theme="material"] .modal-button.primary {
+            background: var(--material-primary);
+            color: var(--material-on-primary);
+        }
+
+        [data-theme="material"] .volume-slider {
+            background: var(--material-surface-variant);
+            border-radius: 100px;
+        }
+
+        [data-theme="material"] .volume-slider::-webkit-slider-thumb {
+            background: var(--material-primary);
+            border-radius: 50%;
+        }
+
+        /* Material You Dark Mode */
+        .dark-mode[data-theme="material"] {
+            --material-primary: #D0BCFF;
+            --material-on-primary: #381E72;
+            --material-surface: #1C1B1F;
+            --material-on-surface: #E6E1E5;
+            --material-surface-variant: #49454F;
+            --vista-bg: linear-gradient(135deg, #381E72 0%, #1C1B1F 100%);
+            --vista-text: #E6E1E5;
+        }
+
+        .dark-mode[data-theme="material"] .button {
+            background: var(--material-primary);
+            color: var(--material-on-primary);
+        }
+
+        .dark-mode[data-theme="material"] .button:hover {
+            background: #E8DDFF;
+        }
+
+        /* ========== NORD THEME ========== */
+        :root[data-theme="nord"] {
+            --nord-bg: #ECEFF4;
+            --nord-surface: #E5E9F0;
+            --nord-text: #2E3440;
+            --nord-accent: #5E81AC;
+            --nord-frost: #88C0D0;
+            --vista-bg: linear-gradient(135deg, #D8DEE9 0%, #ECEFF4 100%);
+            --vista-text: #2E3440;
+        }
+
+        [data-theme="nord"] .window {
+            background: var(--nord-surface);
+            border: 1px solid #D8DEE9;
+            border-radius: 8px;
+        }
+
+        [data-theme="nord"] .title-bar {
+            background: linear-gradient(to bottom, #5E81AC, #4C6A93);
+            color: #ECEFF4;
+            border-radius: 8px 8px 0 0;
+        }
+
+        [data-theme="nord"] .button {
+            background: var(--nord-accent);
+            color: #ECEFF4;
+            border: none;
+            border-radius: 6px;
+        }
+
+        [data-theme="nord"] .button:hover {
+            background: #81A1C1;
+        }
+
+        [data-theme="nord"] .cell {
+            background: #ECEFF4;
+            border: 2px solid #D8DEE9;
+            border-radius: 8px;
+            color: var(--nord-text);
+        }
+
+        [data-theme="nord"] .cell:hover {
+            border-color: var(--nord-frost);
+        }
+
+        [data-theme="nord"] .player-card,
+        [data-theme="nord"] .turn-indicator,
+        [data-theme="nord"] .settings-box {
+            background: #ECEFF4;
+            border: 1px solid #D8DEE9;
+            border-radius: 8px;
+            color: var(--nord-text);
+        }
+
+        [data-theme="nord"] .player-card.active {
+            background: #D8DEE9;
+            border-color: var(--nord-accent);
+        }
+
+        [data-theme="nord"] .modal {
+            background: var(--nord-surface);
+            border-radius: 8px;
+        }
+
+        [data-theme="nord"] .modal-header {
+            background: var(--nord-accent);
+            color: #ECEFF4;
+        }
+
+        [data-theme="nord"] .modal-content {
+            color: var(--nord-text);
+        }
+
+        /* Nord Dark Mode */
+        .dark-mode[data-theme="nord"] {
+            --nord-bg: #2E3440;
+            --nord-surface: #3B4252;
+            --nord-text: #ECEFF4;
+            --vista-bg: linear-gradient(135deg, #2E3440 0%, #3B4252 100%);
+            --vista-text: #ECEFF4;
+        }
+
+        .dark-mode[data-theme="nord"] .cell,
+        .dark-mode[data-theme="nord"] .player-card,
+        .dark-mode[data-theme="nord"] .turn-indicator,
+        .dark-mode[data-theme="nord"] .settings-box {
+            background: #3B4252;
+            border-color: #4C566A;
+            color: #ECEFF4;
+        }
+
+        .dark-mode[data-theme="nord"] .modal,
+        .dark-mode[data-theme="nord"] .modal-content {
+            background: #3B4252;
+            color: #ECEFF4;
+        }
+
+        /* ========== CATPPUCCIN THEME (Latte) ========== */
+        :root[data-theme="catppuccin"] {
+            --ctp-rosewater: #dc8a78;
+            --ctp-flamingo: #dd7878;
+            --ctp-pink: #ea76cb;
+            --ctp-mauve: #8839ef;
+            --ctp-lavender: #7287fd;
+            --ctp-base: #eff1f5;
+            --ctp-surface0: #ccd0da;
+            --ctp-text: #4c4f69;
+            --vista-bg: linear-gradient(135deg, #dce0e8 0%, #eff1f5 50%, #e6e9ef 100%);
+            --vista-text: #4c4f69;
+        }
+
+        [data-theme="catppuccin"] .window {
+            background: var(--ctp-base);
+            border: 2px solid var(--ctp-surface0);
+            border-radius: 12px;
+        }
+
+        [data-theme="catppuccin"] .title-bar {
+            background: linear-gradient(to right, var(--ctp-mauve), var(--ctp-pink));
+            color: #eff1f5;
+            border-radius: 10px 10px 0 0;
+        }
+
+        [data-theme="catppuccin"] .button {
+            background: linear-gradient(to right, var(--ctp-mauve), var(--ctp-lavender));
+            color: #eff1f5;
+            border: none;
+            border-radius: 8px;
+        }
+
+        [data-theme="catppuccin"] .button:hover {
+            filter: brightness(1.1);
+        }
+
+        [data-theme="catppuccin"] .cell {
+            background: var(--ctp-base);
+            border: 2px solid var(--ctp-surface0);
+            border-radius: 10px;
+            color: var(--ctp-text);
+        }
+
+        [data-theme="catppuccin"] .cell:hover {
+            border-color: var(--ctp-lavender);
+        }
+
+        [data-theme="catppuccin"] .player-card,
+        [data-theme="catppuccin"] .turn-indicator,
+        [data-theme="catppuccin"] .settings-box {
+            background: var(--ctp-base);
+            border: 2px solid var(--ctp-surface0);
+            border-radius: 10px;
+            color: var(--ctp-text);
+        }
+
+        [data-theme="catppuccin"] .player-card.active {
+            border-color: var(--ctp-mauve);
+            background: #e6e9ef;
+        }
+
+        [data-theme="catppuccin"] .modal {
+            background: var(--ctp-base);
+            border-radius: 12px;
+        }
+
+        [data-theme="catppuccin"] .modal-header {
+            background: linear-gradient(to right, var(--ctp-mauve), var(--ctp-pink));
+            color: #eff1f5;
+        }
+
+        [data-theme="catppuccin"] .modal-content {
+            color: var(--ctp-text);
+        }
+
+        /* Catppuccin Dark Mode (Mocha) */
+        .dark-mode[data-theme="catppuccin"] {
+            --ctp-base: #1e1e2e;
+            --ctp-surface0: #313244;
+            --ctp-text: #cdd6f4;
+            --ctp-mauve: #cba6f7;
+            --ctp-lavender: #b4befe;
+            --ctp-pink: #f5c2e7;
+            --vista-bg: linear-gradient(135deg, #11111b 0%, #1e1e2e 100%);
+            --vista-text: #cdd6f4;
+        }
+
+        .dark-mode[data-theme="catppuccin"] .cell,
+        .dark-mode[data-theme="catppuccin"] .player-card,
+        .dark-mode[data-theme="catppuccin"] .turn-indicator,
+        .dark-mode[data-theme="catppuccin"] .settings-box {
+            background: #1e1e2e;
+            border-color: #313244;
+            color: #cdd6f4;
+        }
+
+        .dark-mode[data-theme="catppuccin"] .modal,
+        .dark-mode[data-theme="catppuccin"] .modal-content {
+            background: #1e1e2e;
+            color: #cdd6f4;
+        }
+
+        /* ========== DRACULA THEME ========== */
+        :root[data-theme="dracula"] {
+            --dracula-bg: #282a36;
+            --dracula-surface: #44475a;
+            --dracula-text: #f8f8f2;
+            --dracula-purple: #bd93f9;
+            --dracula-pink: #ff79c6;
+            --dracula-cyan: #8be9fd;
+            --dracula-green: #50fa7b;
+            --vista-bg: linear-gradient(135deg, #282a36 0%, #44475a 100%);
+            --vista-text: #f8f8f2;
+        }
+
+        [data-theme="dracula"] .window {
+            background: var(--dracula-bg);
+            border: 2px solid var(--dracula-surface);
+            border-radius: 10px;
+        }
+
+        [data-theme="dracula"] .title-bar {
+            background: linear-gradient(to right, var(--dracula-purple), var(--dracula-pink));
+            color: var(--dracula-text);
+            border-radius: 8px 8px 0 0;
+        }
+
+        [data-theme="dracula"] .button {
+            background: var(--dracula-purple);
+            color: var(--dracula-bg);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        [data-theme="dracula"] .button:hover {
+            background: var(--dracula-pink);
+        }
+
+        [data-theme="dracula"] .cell {
+            background: var(--dracula-surface);
+            border: 2px solid #6272a4;
+            border-radius: 8px;
+            color: var(--dracula-text);
+        }
+
+        [data-theme="dracula"] .cell:hover {
+            border-color: var(--dracula-cyan);
+        }
+
+        [data-theme="dracula"] .player-card,
+        [data-theme="dracula"] .turn-indicator,
+        [data-theme="dracula"] .settings-box {
+            background: var(--dracula-surface);
+            border: 2px solid #6272a4;
+            border-radius: 8px;
+            color: var(--dracula-text);
+        }
+
+        [data-theme="dracula"] .player-card.active {
+            border-color: var(--dracula-purple);
+            box-shadow: 0 0 15px rgba(189, 147, 249, 0.3);
+        }
+
+        [data-theme="dracula"] .modal {
+            background: var(--dracula-bg);
+            border: 2px solid var(--dracula-surface);
+            border-radius: 10px;
+        }
+
+        [data-theme="dracula"] .modal-header {
+            background: linear-gradient(to right, var(--dracula-purple), var(--dracula-pink));
+            color: var(--dracula-text);
+        }
+
+        [data-theme="dracula"] .modal-content {
+            color: var(--dracula-text);
+        }
+
+        [data-theme="dracula"] .modal-button {
+            background: var(--dracula-surface);
+            color: var(--dracula-text);
+            border: 1px solid #6272a4;
+        }
+
+        [data-theme="dracula"] .modal-button.primary {
+            background: var(--dracula-purple);
+            color: var(--dracula-bg);
+            border: none;
+        }
+
+        [data-theme="dracula"] .menu,
+        [data-theme="dracula"] .settings,
+        [data-theme="dracula"] label,
+        [data-theme="dracula"] p {
+            color: var(--dracula-text);
+        }
+
+        /* ========== SOLARIZED THEME ========== */
+        :root[data-theme="solarized"] {
+            --sol-base3: #fdf6e3;
+            --sol-base2: #eee8d5;
+            --sol-base00: #657b83;
+            --sol-base01: #586e75;
+            --sol-blue: #268bd2;
+            --sol-cyan: #2aa198;
+            --sol-green: #859900;
+            --sol-yellow: #b58900;
+            --sol-orange: #cb4b16;
+            --vista-bg: linear-gradient(135deg, #fdf6e3 0%, #eee8d5 100%);
+            --vista-text: #657b83;
+        }
+
+        [data-theme="solarized"] .window {
+            background: var(--sol-base3);
+            border: 1px solid var(--sol-base2);
+            border-radius: 6px;
+        }
+
+        [data-theme="solarized"] .title-bar {
+            background: var(--sol-blue);
+            color: var(--sol-base3);
+            border-radius: 6px 6px 0 0;
+        }
+
+        [data-theme="solarized"] .button {
+            background: var(--sol-blue);
+            color: var(--sol-base3);
+            border: none;
+            border-radius: 4px;
+        }
+
+        [data-theme="solarized"] .button:hover {
+            background: var(--sol-cyan);
+        }
+
+        [data-theme="solarized"] .cell {
+            background: var(--sol-base3);
+            border: 2px solid var(--sol-base2);
+            border-radius: 6px;
+            color: var(--sol-base01);
+        }
+
+        [data-theme="solarized"] .cell:hover {
+            border-color: var(--sol-blue);
+        }
+
+        [data-theme="solarized"] .player-card,
+        [data-theme="solarized"] .turn-indicator,
+        [data-theme="solarized"] .settings-box {
+            background: var(--sol-base3);
+            border: 1px solid var(--sol-base2);
+            border-radius: 6px;
+            color: var(--sol-base01);
+        }
+
+        [data-theme="solarized"] .player-card.active {
+            border-color: var(--sol-blue);
+            background: var(--sol-base2);
+        }
+
+        [data-theme="solarized"] .modal {
+            background: var(--sol-base3);
+            border-radius: 6px;
+        }
+
+        [data-theme="solarized"] .modal-header {
+            background: var(--sol-blue);
+            color: var(--sol-base3);
+        }
+
+        [data-theme="solarized"] .modal-content {
+            color: var(--sol-base01);
+        }
+
+        /* Solarized Dark Mode */
+        .dark-mode[data-theme="solarized"] {
+            --sol-base3: #002b36;
+            --sol-base2: #073642;
+            --sol-base00: #839496;
+            --sol-base01: #93a1a1;
+            --vista-bg: linear-gradient(135deg, #002b36 0%, #073642 100%);
+            --vista-text: #839496;
+        }
+
+        .dark-mode[data-theme="solarized"] .cell,
+        .dark-mode[data-theme="solarized"] .player-card,
+        .dark-mode[data-theme="solarized"] .turn-indicator,
+        .dark-mode[data-theme="solarized"] .settings-box {
+            background: #002b36;
+            border-color: #073642;
+            color: #93a1a1;
+        }
+
+        .dark-mode[data-theme="solarized"] .modal,
+        .dark-mode[data-theme="solarized"] .modal-content {
+            background: #002b36;
+            color: #93a1a1;
+        }
+
+        /* ========== SHARED THEME UTILITIES ========== */
+        [data-theme="material"] select,
+        [data-theme="material"] input,
+        [data-theme="nord"] select,
+        [data-theme="nord"] input,
+        [data-theme="catppuccin"] select,
+        [data-theme="catppuccin"] input,
+        [data-theme="dracula"] select,
+        [data-theme="dracula"] input,
+        [data-theme="solarized"] select,
+        [data-theme="solarized"] input {
+            background: inherit;
+            color: inherit;
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+
+        [data-theme="dracula"] select,
+        [data-theme="dracula"] input {
+            background: var(--dracula-surface);
+            border-color: #6272a4;
+        }
+
+        /* Win animation colors per theme */
+        [data-theme="material"] .cell.win {
+            background: linear-gradient(to bottom, #EADDFF, #D0BCFF);
+            box-shadow: 0 0 15px rgba(103, 80, 164, 0.4);
+        }
+
+        [data-theme="nord"] .cell.win {
+            background: #88C0D0;
+            box-shadow: 0 0 15px rgba(136, 192, 208, 0.4);
+        }
+
+        [data-theme="catppuccin"] .cell.win {
+            background: linear-gradient(to bottom, var(--ctp-lavender), var(--ctp-mauve));
+            box-shadow: 0 0 15px rgba(139, 213, 202, 0.4);
+        }
+
+        [data-theme="dracula"] .cell.win {
+            background: linear-gradient(to bottom, var(--dracula-purple), var(--dracula-pink));
+            box-shadow: 0 0 15px rgba(189, 147, 249, 0.5);
+        }
+
+        [data-theme="solarized"] .cell.win {
+            background: var(--sol-yellow);
+            box-shadow: 0 0 15px rgba(181, 137, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -1501,9 +2101,14 @@
                     <div class="settings-box">
                         <p>Select Theme:</p>
                         <select id="themeSelector">
-                            <option value="default">Default (Vista)</option>
+                            <option value="default">Windows Vista</option>
                             <option value="win98">Windows 98</option>
                             <option value="aqua">Mac OS Aqua</option>
+                            <option value="material">Material You</option>
+                            <option value="nord">Nord</option>
+                            <option value="catppuccin">Catppuccin</option>
+                            <option value="dracula">Dracula</option>
+                            <option value="solarized">Solarized</option>
                         </select>
                     </div>
                     <!-- Add this in the settings section, after the theme selector -->
@@ -2592,7 +3197,7 @@
             });
         }
 
-        // Update the addMusicToggle function for Mac OS theme
+        // Update the addMusicToggle function for different themes
         function addMusicToggle() {
             const titleBarButtons = document.querySelector('.title-bar-buttons');
             const theme = document.documentElement.getAttribute('data-theme');
@@ -2621,14 +3226,14 @@
                 titleBarButtons.appendChild(closeButton);
                 titleBarButtons.appendChild(minimizeButton);
                 titleBarButtons.appendChild(musicButton);
-            } else {
-                // Original style buttons for other themes
+            } else if (theme === 'material') {
+                // Material You style buttons
                 const musicButton = document.createElement('div');
                 musicButton.className = 'title-button music-button';
                 musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
-                musicButton.style.background = audioEnabled ? 
-                    'linear-gradient(to bottom, #4CAF50, #45a049)' : 
-                    'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
+                musicButton.style.background = audioEnabled ? '#D0BCFF' : '#E7E0EC';
+                musicButton.style.borderRadius = '50%';
+                musicButton.style.padding = '4px';
                 musicButton.style.marginRight = '8px';
                 
                 musicButton.onclick = (e) => {
@@ -2637,6 +3242,57 @@
                     document.getElementById('audioEnabled').checked = audioEnabled;
                     localStorage.setItem('audioEnabled', audioEnabled);
                     updateAudioVolumes();
+                    musicButton.style.background = audioEnabled ? '#D0BCFF' : '#E7E0EC';
+                };
+                
+                const closeButton = document.createElement('div');
+                closeButton.className = 'title-button';
+                closeButton.textContent = '✕';
+                closeButton.style.borderRadius = '50%';
+                closeButton.onclick = () => openMenu(menu);
+                
+                titleBarButtons.appendChild(musicButton);
+                titleBarButtons.appendChild(closeButton);
+            } else {
+                // Default style buttons for other themes
+                const musicButton = document.createElement('div');
+                musicButton.className = 'title-button music-button';
+                musicButton.innerHTML = audioEnabled ? '🔊' : '🔇';
+                
+                // Theme-specific button colors
+                let onColor, offColor;
+                switch(theme) {
+                    case 'nord':
+                        onColor = 'linear-gradient(to bottom, #88C0D0, #5E81AC)';
+                        offColor = 'linear-gradient(to bottom, #BF616A, #A54A52)';
+                        break;
+                    case 'catppuccin':
+                        onColor = 'linear-gradient(to bottom, #a6e3a1, #94e2d5)';
+                        offColor = 'linear-gradient(to bottom, #f38ba8, #eba0ac)';
+                        break;
+                    case 'dracula':
+                        onColor = 'linear-gradient(to bottom, #50fa7b, #3de268)';
+                        offColor = 'linear-gradient(to bottom, #ff5555, #ff6e6e)';
+                        break;
+                    case 'solarized':
+                        onColor = 'linear-gradient(to bottom, #859900, #6d7d00)';
+                        offColor = 'linear-gradient(to bottom, #dc322f, #c42a27)';
+                        break;
+                    default:
+                        onColor = 'linear-gradient(to bottom, #4CAF50, #45a049)';
+                        offColor = 'linear-gradient(to bottom, #ff5c5c, #e33e3e)';
+                }
+                
+                musicButton.style.background = audioEnabled ? onColor : offColor;
+                musicButton.style.marginRight = '8px';
+                
+                musicButton.onclick = (e) => {
+                    e.stopPropagation();
+                    audioEnabled = !audioEnabled;
+                    document.getElementById('audioEnabled').checked = audioEnabled;
+                    localStorage.setItem('audioEnabled', audioEnabled);
+                    updateAudioVolumes();
+                    musicButton.style.background = audioEnabled ? onColor : offColor;
                 };
                 
                 const closeButton = document.createElement('div');
@@ -2682,6 +3338,9 @@
                 const theme = e.target.value;
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('gameTheme', theme);
+                
+                // Refresh music toggle buttons for new theme
+                addMusicToggle();
                 
                 // Add theme change animation
                 document.body.style.animation = 'themeTransition 0.3s ease';
