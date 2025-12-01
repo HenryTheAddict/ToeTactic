@@ -2161,6 +2161,290 @@
             background: var(--sol-yellow);
             box-shadow: 0 0 15px rgba(181, 137, 0, 0.4);
         }
+
+        /* Dark mode win cell colors */
+        .dark-mode[data-theme="material"] .cell.win {
+            background: linear-gradient(135deg, #D0BCFF, #7F67BE) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 0 25px rgba(208, 188, 255, 0.6);
+        }
+
+        .dark-mode[data-theme="nord"] .cell.win {
+            background: linear-gradient(135deg, #88C0D0, #5E81AC) !important;
+            color: #ECEFF4 !important;
+            box-shadow: 0 0 25px rgba(136, 192, 208, 0.5);
+        }
+
+        .dark-mode[data-theme="catppuccin"] .cell.win {
+            background: linear-gradient(135deg, #cba6f7, #89b4fa) !important;
+            color: #cdd6f4 !important;
+            box-shadow: 0 0 25px rgba(203, 166, 247, 0.5);
+        }
+
+        .dark-mode[data-theme="solarized"] .cell.win {
+            background: linear-gradient(135deg, #b58900, #cb4b16) !important;
+            color: #fdf6e3 !important;
+            box-shadow: 0 0 25px rgba(181, 137, 0, 0.5);
+        }
+
+        .dark-mode .cell.win {
+            color: #FFFFFF !important;
+        }
+
+        /* ========== GAME LOG PANEL ========== */
+        .game-log-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 16px;
+            max-height: 300px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-log-panel.active {
+            display: flex;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .log-title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .log-title::before {
+            content: '📋';
+        }
+
+        .playback-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .playback-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .playback-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .playback-btn.active {
+            background: #6750A4;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+        }
+
+        .speed-control select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .log-entries {
+            overflow-y: auto;
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .log-entry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            animation: logSlideIn 0.3s ease;
+        }
+
+        .log-entry.highlight {
+            background: rgba(103, 80, 164, 0.3);
+            border: 1px solid rgba(103, 80, 164, 0.5);
+        }
+
+        @keyframes logSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .log-move-num {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 11px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .log-player {
+            font-size: 18px;
+        }
+
+        .log-position {
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .log-timestamp {
+            margin-left: auto;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6750A4, #D0BCFF);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* ========== MODERNIZED UI ========== */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        [data-theme="material"] {
+            font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+        }
+
+        [data-theme="material"] .window {
+            box-shadow: 
+                0 1px 2px rgba(0,0,0,0.05),
+                0 4px 8px rgba(0,0,0,0.1),
+                0 16px 32px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="material"] .button {
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-transform: none;
+        }
+
+        [data-theme="material"] .cell {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="material"] .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(103, 80, 164, 0.2);
+        }
+
+        [data-theme="material"] .player-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="material"] .player-card.active {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(103, 80, 164, 0.3);
+        }
+
+        /* Modern animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(103, 80, 164, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(103, 80, 164, 0.6); }
+        }
+
+        [data-theme="material"] .cell.win {
+            animation: winAnimation 1s infinite alternate, pulse-glow 2s infinite;
+        }
+
+        /* Smooth scroll for log */
+        .log-entries::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .log-entries::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .log-entries::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .log-entries::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Toggle button for game log */
+        .log-toggle {
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 10px auto;
+            transition: all 0.2s ease;
+        }
+
+        .log-toggle:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .log-toggle.active {
+            background: #6750A4;
+            border-color: #6750A4;
+        }
     </style>
 </head>
 <body>
@@ -2263,6 +2547,39 @@
                         <div class="board" id="board"></div>
                     </div>
                     <div class="terminal" id="calculationTerminal"></div>
+                    
+                    <!-- Game Log Toggle -->
+                    <button class="log-toggle" id="logToggle">
+                        <span>📋</span> Game Log
+                    </button>
+                    
+                    <!-- Game Log Panel -->
+                    <div class="game-log-panel" id="gameLogPanel">
+                        <div class="log-header">
+                            <div class="log-title">Game Log</div>
+                            <div class="playback-controls">
+                                <button class="playback-btn" id="rewindBtn" title="Rewind">⏮</button>
+                                <button class="playback-btn" id="playPauseBtn" title="Play/Pause">▶</button>
+                                <button class="playback-btn" id="stepBtn" title="Step Forward">⏭</button>
+                                <div class="speed-control">
+                                    <span>Speed:</span>
+                                    <select id="playbackSpeed">
+                                        <option value="2000">0.5x</option>
+                                        <option value="1000" selected>1x</option>
+                                        <option value="500">2x</option>
+                                        <option value="250">4x</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="log-entries" id="logEntries">
+                            <!-- Log entries will be added here dynamically -->
+                        </div>
+                    </div>
+                    
                     <div class="bottom-menu" id="gameMenuButton" style="display: none;">
                         <div class="button" id="backToMainMenu">Menu</div>
                     </div>
@@ -2336,6 +2653,13 @@
         let masterVolume = 0.5;
         let musicVolume = 0.5;
         let audioEnabled = true;
+
+        // Game Log variables
+        let gameLog = [];
+        let isPlayingBack = false;
+        let playbackIndex = 0;
+        let playbackInterval = null;
+        let gameStartTime = null;
 
         // Add this function to initialize audio settings
         function initializeAudioSettings() {
@@ -2585,6 +2909,9 @@
             terminal.style.display = playWithBotMode && aiDifficulty.value === 'impossible' ? 'block' : 'none';
             terminal.innerHTML = '';
             board.innerHTML = '';
+            
+            // Clear game log for new game
+            clearGameLog();
             board.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
             board.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
 
@@ -2749,11 +3076,12 @@
         function resetBoard() {
             cells.forEach(row => row.forEach(cell => {
                 cell.querySelector('.cell-content').textContent = '';
-                cell.classList.remove('win');
+                cell.classList.remove('win', 'placed');
             }));
             currentPlayerIndex = 0;
             updateTurnIndicator();
             updatePlayerQueue();
+            clearGameLog();
         }
 
         // Update the botMove function to properly handle bot moves
@@ -2776,7 +3104,7 @@
                 let cell;
                 
                 if (aiDifficulty.value === 'impossible') {
-                    cell = findBestMoveImpossible();
+                    cell = findBestMoveImpossiblePerfect();
                 } else {
                     switch (aiDifficulty.value) {
                         case 'hard':
@@ -2816,7 +3144,12 @@
             const row = parseInt(cell.dataset.row);
             const col = parseInt(cell.dataset.col);
             
+            // Log the move
+            addLogEntry(players[currentPlayerIndex], row, col);
+            
             if (checkLose(row, col)) {
+                // Log game end
+                addLogEntry('🏆', -1, -1, `${players[(currentPlayerIndex + 1) % players.length]} wins!`);
                 setTimeout(() => {
                     showGameModal(
                         'Game Over',
@@ -2826,6 +3159,7 @@
                     startContinuousConfetti();
                 }, 100);
             } else if (isBoardFull()) {
+                addLogEntry('🤝', -1, -1, 'Game ended in a draw!');
                 setTimeout(() => {
                     showGameModal('Game Over', "It's a draw!");
                 }, 100);
@@ -3653,6 +3987,465 @@
             attributes: true,
             attributeFilter: ['data-theme']
         });
+
+        // ========== GAME LOG FUNCTIONS ==========
+        function initializeGameLog() {
+            const logToggle = document.getElementById('logToggle');
+            const logPanel = document.getElementById('gameLogPanel');
+            const rewindBtn = document.getElementById('rewindBtn');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const stepBtn = document.getElementById('stepBtn');
+            const speedSelect = document.getElementById('playbackSpeed');
+
+            logToggle.addEventListener('click', () => {
+                logToggle.classList.toggle('active');
+                logPanel.classList.toggle('active');
+            });
+
+            rewindBtn.addEventListener('click', () => {
+                stopPlayback();
+                playbackIndex = 0;
+                replayToIndex(0);
+            });
+
+            playPauseBtn.addEventListener('click', () => {
+                if (isPlayingBack) {
+                    stopPlayback();
+                } else {
+                    startPlayback();
+                }
+            });
+
+            stepBtn.addEventListener('click', () => {
+                stopPlayback();
+                if (playbackIndex < gameLog.length) {
+                    replayToIndex(playbackIndex + 1);
+                }
+            });
+
+            speedSelect.addEventListener('change', () => {
+                if (isPlayingBack) {
+                    stopPlayback();
+                    startPlayback();
+                }
+            });
+        }
+
+        function addLogEntry(player, row, col, message = null) {
+            const timestamp = gameStartTime ? Math.floor((Date.now() - gameStartTime) / 1000) : 0;
+            const moveNum = gameLog.length + 1;
+            
+            const entry = {
+                player,
+                row,
+                col,
+                timestamp,
+                moveNum,
+                message
+            };
+            
+            gameLog.push(entry);
+            renderLogEntry(entry);
+            updateProgressBar();
+        }
+
+        function renderLogEntry(entry) {
+            const logEntries = document.getElementById('logEntries');
+            const entryEl = document.createElement('div');
+            entryEl.className = 'log-entry';
+            entryEl.dataset.index = entry.moveNum - 1;
+            
+            if (entry.message) {
+                entryEl.innerHTML = `
+                    <span class="log-move-num">${entry.moveNum}</span>
+                    <span class="log-player">${entry.player}</span>
+                    <span class="log-position">${entry.message}</span>
+                    <span class="log-timestamp">${formatTime(entry.timestamp)}</span>
+                `;
+            } else {
+                entryEl.innerHTML = `
+                    <span class="log-move-num">${entry.moveNum}</span>
+                    <span class="log-player">${entry.player}</span>
+                    <span class="log-position">(${entry.row}, ${entry.col})</span>
+                    <span class="log-timestamp">${formatTime(entry.timestamp)}</span>
+                `;
+            }
+            
+            logEntries.appendChild(entryEl);
+            logEntries.scrollTop = logEntries.scrollHeight;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function clearGameLog() {
+            gameLog = [];
+            playbackIndex = 0;
+            gameStartTime = Date.now();
+            document.getElementById('logEntries').innerHTML = '';
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progressFill = document.getElementById('progressFill');
+            const progress = gameLog.length > 0 ? (playbackIndex / gameLog.length) * 100 : 0;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        function startPlayback() {
+            if (gameLog.length === 0) return;
+            
+            isPlayingBack = true;
+            document.getElementById('playPauseBtn').textContent = '⏸';
+            document.getElementById('playPauseBtn').classList.add('active');
+            
+            const speed = parseInt(document.getElementById('playbackSpeed').value);
+            
+            playbackInterval = setInterval(() => {
+                if (playbackIndex < gameLog.length) {
+                    replayToIndex(playbackIndex + 1);
+                } else {
+                    stopPlayback();
+                }
+            }, speed);
+        }
+
+        function stopPlayback() {
+            isPlayingBack = false;
+            document.getElementById('playPauseBtn').textContent = '▶';
+            document.getElementById('playPauseBtn').classList.remove('active');
+            
+            if (playbackInterval) {
+                clearInterval(playbackInterval);
+                playbackInterval = null;
+            }
+        }
+
+        function replayToIndex(targetIndex) {
+            // Clear board first
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const cell = cells[i][j];
+                    cell.querySelector('.cell-content').textContent = '';
+                    cell.classList.remove('placed', 'win');
+                }
+            }
+            
+            // Replay moves up to targetIndex
+            for (let i = 0; i < targetIndex && i < gameLog.length; i++) {
+                const move = gameLog[i];
+                if (move.row >= 0 && move.col >= 0) {
+                    const cell = cells[move.row][move.col];
+                    cell.querySelector('.cell-content').textContent = move.player;
+                    cell.classList.add('placed');
+                }
+            }
+            
+            // Highlight current entry
+            document.querySelectorAll('.log-entry').forEach((el, idx) => {
+                el.classList.toggle('highlight', idx === targetIndex - 1);
+            });
+            
+            playbackIndex = targetIndex;
+            updateProgressBar();
+        }
+
+        // Initialize game log on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', initializeGameLog);
+
+        // ========== TRULY UNBEATABLE AI ==========
+        // Perfect play using complete game tree search for 3x3
+        // and optimized alpha-beta for larger boards
+        
+        function findBestMoveImpossiblePerfect() {
+            const terminal = document.getElementById('calculationTerminal');
+            terminal.innerHTML = '';
+            addTerminalLine('🧠 IMPOSSIBLE MODE: Computing perfect play...');
+            
+            // For 3x3, we can solve the game completely
+            if (gridSize === 3) {
+                return findPerfectMove3x3();
+            }
+            
+            // For larger boards, use deep alpha-beta with perfect heuristics
+            return findBestMoveDeep();
+        }
+
+        function findPerfectMove3x3() {
+            // This is a "lose to win" game - avoid making 3 in a row
+            // Perfect play: never make a move that creates 2 in a row unless forced
+            
+            let bestMove = null;
+            let bestScore = -Infinity;
+            const terminal = document.getElementById('calculationTerminal');
+            
+            // Get all empty cells
+            const emptyCells = [];
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        emptyCells.push({row: i, col: j, cell: cells[i][j]});
+                    }
+                }
+            }
+            
+            // Evaluate each move with full depth search
+            for (const {row, col, cell} of emptyCells) {
+                cells[row][col].querySelector('.cell-content').textContent = players[1];
+                
+                // Check if this move loses immediately
+                if (checkLose(row, col, false)) {
+                    cells[row][col].querySelector('.cell-content').textContent = '';
+                    addTerminalLine(`❌ (${row},${col}): LOSES IMMEDIATELY - skip`);
+                    continue;
+                }
+                
+                // Full minimax to end of game
+                const score = minimaxPerfect(0, false, -Infinity, Infinity);
+                cells[row][col].querySelector('.cell-content').textContent = '';
+                
+                addTerminalLine(`📊 (${row},${col}): Score = ${score}`);
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = cell;
+                    addTerminalLine(`✨ New best: (${row},${col}) = ${score}`);
+                }
+            }
+            
+            // If all moves lose, pick the one that delays the longest
+            if (!bestMove && emptyCells.length > 0) {
+                addTerminalLine(`⚠️ All moves lose - picking longest delay`);
+                bestMove = emptyCells[0].cell;
+            }
+            
+            addTerminalLine(`🎯 Final choice: Score = ${bestScore}`);
+            return bestMove;
+        }
+
+        function minimaxPerfect(depth, isMaximizing, alpha, beta) {
+            // Check for terminal states
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const content = cells[i][j].querySelector('.cell-content').textContent;
+                    if (content !== '' && checkLose(i, j, false)) {
+                        // Someone made 3 in a row - they LOSE
+                        // In this game, making 3 in a row = losing
+                        if (content === players[1]) {
+                            return -1000 + depth; // Bot loses - very bad
+                        } else {
+                            return 1000 - depth; // Player loses - very good for bot
+                        }
+                    }
+                }
+            }
+            
+            // Check for draw
+            if (isBoardFull()) {
+                return 0;
+            }
+            
+            if (isMaximizing) {
+                // Bot's turn - maximize
+                let maxScore = -Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[1];
+                            const score = minimaxPerfect(depth + 1, false, alpha, beta);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            maxScore = Math.max(score, maxScore);
+                            alpha = Math.max(alpha, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                    if (beta <= alpha) break;
+                }
+                return maxScore;
+            } else {
+                // Player's turn - minimize (player plays optimally against bot)
+                let minScore = Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[0];
+                            const score = minimaxPerfect(depth + 1, true, alpha, beta);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            minScore = Math.min(score, minScore);
+                            beta = Math.min(beta, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                    if (beta <= alpha) break;
+                }
+                return minScore;
+            }
+        }
+
+        function findBestMoveDeep() {
+            // For larger boards, use iterative deepening with strong heuristics
+            let bestMove = null;
+            let bestScore = -Infinity;
+            const terminal = document.getElementById('calculationTerminal');
+            
+            // Calculate depth based on remaining empty cells
+            const emptyCells = countEmptyCells();
+            const maxDepth = Math.min(12, emptyCells); // Go deeper as game progresses
+            
+            addTerminalLine(`🔍 Searching depth: ${maxDepth}, Empty cells: ${emptyCells}`);
+            
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                        cells[i][j].querySelector('.cell-content').textContent = players[1];
+                        
+                        // Skip moves that lose immediately
+                        if (checkLose(i, j, false)) {
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            continue;
+                        }
+                        
+                        const score = minimaxDeep(0, false, -Infinity, Infinity, maxDepth);
+                        cells[i][j].querySelector('.cell-content').textContent = '';
+                        
+                        addTerminalLine(`(${i},${j}): ${score.toFixed(1)}`);
+                        
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = cells[i][j];
+                        }
+                    }
+                }
+            }
+            
+            // If no safe move, pick any available
+            if (!bestMove) {
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            return cells[i][j];
+                        }
+                    }
+                }
+            }
+            
+            return bestMove;
+        }
+
+        function minimaxDeep(depth, isMaximizing, alpha, beta, maxDepth) {
+            // Check terminal states
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const content = cells[i][j].querySelector('.cell-content').textContent;
+                    if (content !== '' && checkLose(i, j, false)) {
+                        if (content === players[1]) {
+                            return -1000 + depth;
+                        } else {
+                            return 1000 - depth;
+                        }
+                    }
+                }
+            }
+            
+            if (isBoardFull()) return 0;
+            
+            // Depth limit with heuristic evaluation
+            if (depth >= maxDepth) {
+                return evaluatePositionStrategic();
+            }
+            
+            if (isMaximizing) {
+                let maxScore = -Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[1];
+                            const score = minimaxDeep(depth + 1, false, alpha, beta, maxDepth);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            maxScore = Math.max(score, maxScore);
+                            alpha = Math.max(alpha, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                    if (beta <= alpha) break;
+                }
+                return maxScore;
+            } else {
+                let minScore = Infinity;
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        if (cells[i][j].querySelector('.cell-content').textContent === '') {
+                            cells[i][j].querySelector('.cell-content').textContent = players[0];
+                            const score = minimaxDeep(depth + 1, true, alpha, beta, maxDepth);
+                            cells[i][j].querySelector('.cell-content').textContent = '';
+                            minScore = Math.min(score, minScore);
+                            beta = Math.min(beta, score);
+                            if (beta <= alpha) break;
+                        }
+                    }
+                    if (beta <= alpha) break;
+                }
+                return minScore;
+            }
+        }
+
+        function evaluatePositionStrategic() {
+            let score = 0;
+            
+            // Analyze all lines for threats
+            const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+            
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    for (const [dr, dc] of directions) {
+                        // Check 3-cell windows
+                        let botCount = 0;
+                        let playerCount = 0;
+                        let emptyCount = 0;
+                        let validWindow = true;
+                        
+                        for (let k = 0; k < 3; k++) {
+                            const r = i + k * dr;
+                            const c = j + k * dc;
+                            
+                            if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) {
+                                validWindow = false;
+                                break;
+                            }
+                            
+                            const content = cells[r][c].querySelector('.cell-content').textContent;
+                            if (content === players[1]) botCount++;
+                            else if (content === players[0]) playerCount++;
+                            else emptyCount++;
+                        }
+                        
+                        if (!validWindow) continue;
+                        
+                        // Scoring: Bot should AVOID making 3 in a row
+                        // Penalize positions where bot has 2 in potential line
+                        if (botCount === 2 && emptyCount === 1) {
+                            score -= 100; // Very dangerous - bot might be forced to complete
+                        }
+                        if (botCount === 1 && emptyCount === 2) {
+                            score -= 10; // Somewhat dangerous
+                        }
+                        
+                        // Reward forcing player to make 3 in a row
+                        if (playerCount === 2 && emptyCount === 1) {
+                            score += 80; // Good - player might be forced to complete
+                        }
+                        if (playerCount === 1 && emptyCount === 2) {
+                            score += 5; // Slightly good
+                        }
+                    }
+                }
+            }
+            
+            return score;
+        }
     </script>
 </body>
 </html>
